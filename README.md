@@ -1,108 +1,130 @@
-# 🚀 Smart Job Scanner v2
+# 🚀 Smart Job Scanner v2  
+### A High-Throughput Job Intelligence & Data Refinery
 
-Smart Job Scanner v2 is an autonomous job discovery and matching system that monitors daily newspapers, extracts job advertisements using OCR and LLMs, and delivers relevant opportunities directly via Telegram.
+**Smart Job Scanner v2** is an autonomous **ETL (Extract, Transform, Load) + Intelligence pipeline** that bridges the gap between traditional print media and modern job search.
 
-The system targets job notifications that are often published only in print (such as government and institutional postings) and is engineered with an emphasis on **predictable execution, hardware awareness, and operational stability**, allowing it to run continuously once scheduled.
+It continuously ingests unstructured newspaper PDFs, processes **~15–20 GB of raw visual data per run**, and distills it into **high-signal, relevance-scored job alerts** delivered via Telegram.
+
+The system is designed for **hardware-constrained environments**, predictable execution, and long-running scheduled operation.
 
 ---
 
 ## ✨ What This System Does
 
-- Automatically downloads daily newspaper PDFs  
-- Converts PDFs into images and detects advertisement layouts  
-- Performs multilingual OCR (English & Hindi)  
-- Extracts structured job data using local and cloud LLMs  
-- **Performs semantic similarity matching with a normalized scoring system, generating relevance-weighted alerts**  
-- Sends concise, personalized Telegram notifications  
-- Maintains persistent state to prevent duplicate alerts  
+- Automatically downloads daily newspaper PDFs (web + Telegram sources)
+- Converts PDFs into images and isolates job advertisements using computer vision
+- Performs multilingual OCR (English & Hindi)
+- Extracts structured job data using local and cloud LLMs
+- **Performs semantic similarity matching with a normalized scoring system**
+- Sends concise, relevance-weighted Telegram alerts
+- Maintains persistent state to prevent duplicate notifications
 
 ---
 
-## 🏗️ High-Level Workflow
+## 🏗️ Engineering Architecture  
+### A Stateful 12-Stage Pipeline
 
-1. **Ingestion** – Scheduled download of target newspapers  
-2. **Vision Processing** – PDF-to-image conversion and layout detection  
-3. **OCR** – Multilingual text extraction from detected blocks  
-4. **Parsing** – Local LLM converts noisy OCR output into structured JSON  
-5. **Multi-Stage Verification Gate** – Cloud LLM performs final schema validation and filtering on noisy OCR/LLM outputs  
-6. **Matching** – Semantic comparison with resume profiles  
-7. **Notification** – Telegram alerts with job metadata and relevance score  
+The system is implemented as a **deterministic, stateful, 12-stage pipeline**, moving from raw pixels to semantic job intelligence.
 
 ---
 
-## 🧠 Key Design Decisions
+### 1️⃣ Ingestion & Vision (src/01 – src/03)
 
-- **Hardware-Aware Scheduling**  
-  Compute-heavy OCR and LLM workloads are scheduled during off-peak hours to minimize contention on shared systems and reduce sustained thermal load on consumer hardware.
+- **Resilient Ingestion**  
+  Multi-channel downloader (web scraping + Telegram API fallbacks) with retry logic and backoff handling.
 
-- **Local-First, Cloud-Validated Processing**  
-  Primary extraction and parsing are handled locally, with cloud LLMs used selectively as a final validation layer where accuracy matters most.
+- **Dynamic DPI Estimation**  
+  Adaptive scaling engine computes optimal DPI per page to balance OCR accuracy against GPU VRAM limits.
 
-- **Structured Validation Gate**  
-  OCR and local LLM outputs are treated as unstructured, noisy data and passed through a cloud-based LLM gate for schema validation, filtering, and consistency checks.
-
-- **Stateful, Idempotent Execution**  
-  SQLite-backed state tracking enables safe re-runs, incremental progress, and recovery from partial failures without reprocessing completed steps.
+- **Layout Intelligence**  
+  Parallelized block detection using OpenCV to isolate job advertisements from general newspaper noise.
 
 ---
 
-## 📐 Scale & Data Reduction
+### 2️⃣ OCR & Extraction Engine (src/04 – src/07)
 
-- **Processing Volume:**  
-  Designed to process **12–16 daily newspapers per run**, generating approximately **15–20 GB of transient image and OCR data** during peak stages.
+- **Hardware-Aware OCR**  
+  Custom EasyOCR pipeline with:
+  - GPU VRAM governor (capped at ~3800 MB for NVIDIA 3050 Ti stability)
+  - Multi-core CPU fallback paths for reliability
 
-- **Processing Speed:**  
-  Average end-to-end execution time of **40–60 minutes** for a full 16-newspaper batch (~20 GB raw throughput), depending on OCR engine and hardware profile.
+- **Stateful Local LLM Inference (Ollama)**  
+  SQLite-backed checkpointing ensures crash-safe execution.  
+  If processing halts at page *N*, it resumes from *N+1* with no data loss.
 
-- **Resource Balancing:**  
-  Optimized for concurrent CPU/GPU utilization, balancing GPU-based OCR (EasyOCR) and LLM inference (Ollama) with multi-core CPU preprocessing stages.
-
-- **Data-to-Insight Compression:**  
-  Large volumes of raw, unstructured scan data are distilled into **a few kilobytes of structured, relevance-ranked job alerts**, achieving a high signal-to-noise ratio for human consumption.
-
----
-
-## 🛠️ Tech Stack
-
-- **Language:** Python 3.x  
-- **OCR Engines:** EasyOCR, Tesseract (GPU/CPU variants evaluated)  
-- **LLMs:** Ollama (local), Google Gemini / GPT (cloud)  
-- **Embeddings:** Sentence-Transformers  
-- **Automation & Scraping:** Selenium, Telethon (Telegram Client)  
-- **Databases:** SQLite (state, history, and interaction tracking)  
-- **Orchestration:** Bash scripts (`scheduler.sh`, `run_pipeline.sh`)  
-- **Notifications:** Telegram Bot API  
+- **Adaptive Token Windowing**  
+  Dynamically adjusts generation limits based on OCR text density to optimize inference speed.
 
 ---
 
-## 📂 Project Structure
+### 3️⃣ Semantic Filtering & Delivery (src/08 – src/12)
 
+- **Multi-Stage Verification Gate**  
+  OCR and local LLM outputs are treated as **unstructured, noisy data** and passed through a cloud-based LLM gate (Gemini/GPT) for schema validation and filtering.
+
+- **Semantic Scoring**  
+  Sentence-Transformers compute cosine similarity between extracted jobs and dynamically updated resume profiles.
+
+- **Delivery**  
+  High-signal, relevance-ranked job alerts are delivered via Telegram.
+
+- **Data Lifecycle Management**  
+  Automated cleanup enforces a **24-hour retention policy** on transient image data to prevent disk exhaustion.
+
+---
+
+## 🔁 End-to-End Pipeline Flow
+
+```mermaid
+graph TD
+    A[PDF Ingestion: Web / Telegram] --> B[Vision: Dynamic DPI Conversion]
+    B --> C[Layout Detection: Smart Blocks]
+    C --> D[OCR: Multilingual EasyOCR (GPU)]
+    D --> E[NLP: Argos Translation]
+    E --> F[Batching: Ollama Input Prep]
+    F --> G[LLM: Local Extraction (Ollama)]
+    G --> H[Verification: Cloud LLM Gate]
+    H --> I[Matching: Semantic Embedding Score]
+    I --> J[State: SQLite Deduplication]
+    J --> K[Alert: Telegram Notification]
+    K --> L[Cleanup: 24h Data Retention]
 ```
-src/
-  - Core numbered scripts implement the stable 12-stage processing pipeline
-  - Experimental components form an OCR & LLM benchmarking suite,
-    enabling A/B evaluation of engines and performance trade-offs
 
-data/
-  - Persistent storage for PDFs, images, OCR outputs, structured job data,
-    resume profiles, and SQLite databases used for state tracking
-  - Includes an automated 24-hour data lifecycle policy to maintain storage health
+---
 
-logs/
-  - Execution logs for monitoring, performance analysis, and post-run inspection
-```
+## 📐 Scale, Performance & Data Reduction
+
+- **Processing Volume**  
+  12–16 newspapers per run  
+  ~15–20 GB transient image + OCR data per execution
+
+- **Processing Speed**  
+  End-to-end execution time: **40–60 minutes** per full batch  
+  (hardware and OCR-engine dependent)
+
+- **Resource Balancing**  
+  Concurrent CPU/GPU utilization:
+  - GPU: OCR + local LLM inference  
+  - CPU: preprocessing, layout detection, batching
+
+- **Data-to-Insight Compression**  
+  ~20 GB of raw scan data → **~5 KB of structured job alerts**  
+  **Compression ratio: ~4,000,000 : 1**
 
 ---
 
 ## ⚙️ Orchestration & Automation
 
-The system uses a two-layer orchestration model:
+The system uses a **two-layer orchestration model**:
 
-- **scheduler.sh**  
-  Acts as the time-based automation layer, triggering scheduled executions and invoking the pipeline controller.
+- **`scheduler.sh`**  
+  Time-based automation layer responsible for triggering scheduled runs.
 
-- **run_pipeline.sh**  
-  Serves as the pipeline control plane, executing processing stages in deterministic order, skipping completed steps via persisted state, and supporting safe retries.
+- **`run_pipeline.sh`**  
+  Pipeline control plane that:
+  - Executes stages in deterministic order  
+  - Skips completed steps via persisted state  
+  - Supports safe retries and crash recovery  
 
 This separation cleanly decouples *when* the system runs from *how* the pipeline executes.
 
@@ -110,32 +132,53 @@ This separation cleanly decouples *when* the system runs from *how* the pipeline
 
 ## 🗄️ Data Persistence & State Tracking
 
-SQLite databases are used to:
+SQLite databases are used for:
 
-- Track processed job postings and shortlist history  
-- Prevent duplicate alerts across runs  
-- Enable incremental processing and crash-safe recovery  
-- Support auditing of matching logic and pipeline behavior  
+- Processed job tracking & deduplication  
+- Resume matching history  
+- LLM interaction logging  
+- Crash-safe incremental progress  
+
+This enables predictable behavior across repeated scheduled executions.
 
 ---
 
 ## 📊 Operational Notes
 
-- Field-tested with **30+ consecutive days of zero-intervention scheduled runs**  
-- Comprehensive logging enables post-run auditing of extraction quality, matching decisions, and hardware performance  
+- Field-tested with **30+ consecutive days of zero-intervention scheduled runs**
+- Comprehensive logging enables post-run auditing of:
+  - OCR accuracy
+  - Matching decisions
+  - Hardware utilization
 
 ---
 
-## 🔐 License
+## 🔬 R&D & Benchmarking
 
-This project is licensed under the **Apache License 2.0**.
+This project includes extensive benchmarking of alternative engines:
+
+- **PaddleOCR** – Deprecated due to CUDA compatibility issues
+- **Tesseract** – Rejected for poor accuracy on low-contrast regional fonts
+- **Argos Translate** – Selected for fast CPU-based batch translation, freeing GPU for OCR/LLM workloads
+
+---
+
+## 🛠️ Tech Stack
+
+- **Language:** Python 3.x  
+- **Vision & OCR:** OpenCV, EasyOCR, PyMuPDF (fitz)  
+- **LLMs:** Ollama (local), Google Gemini / GPT (cloud validation)  
+- **Embeddings:** Sentence-Transformers (BERT/RoBERTa)  
+- **Automation & Scraping:** Selenium, Telethon (Telegram Client)  
+- **Persistence:** SQLite3 (state, history, deduplication)  
+- **Orchestration:** Bash (`scheduler.sh`, `run_pipeline.sh`)  
+- **Notifications:** Telegram Bot API  
 
 ---
 
 ## 👤 Author
 
 **Siddharth Singh**  
-Electrical Engineering background  
-AI / ML • Systems Automation  
+B.Tech Electrical Engineering (2024)  
 
-Focused on building predictable, resource-aware systems that operate continuously under real-world constraints.
+Focus: Designing **resource-aware, hardware-constrained AI systems** that operate continuously under real-world constraints.
