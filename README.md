@@ -77,17 +77,17 @@ The system is implemented as a **deterministic, stateful, 12-stage pipeline**, m
 
 ```mermaid
 graph TD
-    A[PDF Ingestion: Web / Telegram] --> B[Vision: Dynamic DPI Conversion]
-    B --> C[Layout Detection: Smart Blocks]
-    C --> D[OCR: Multilingual EasyOCR (GPU)]
-    D --> E[NLP: Argos Translation]
-    E --> F[Batching: Ollama Input Prep]
-    F --> G[LLM: Local Extraction (Ollama)]
-    G --> H[Verification: Cloud LLM Gate]
-    H --> I[Matching: Semantic Embedding Score]
-    I --> J[State: SQLite Deduplication]
-    J --> K[Alert: Telegram Notification]
-    K --> L[Cleanup: 24h Data Retention]
+    A[PDF Ingestion Web and Telegram] --> B[Vision Dynamic DPI Conversion]
+    B --> C[Layout Detection Smart Blocks]
+    C --> D[OCR Multilingual EasyOCR GPU]
+    D --> E[NLP Argos Translation]
+    E --> F[Batching Ollama Input Preparation]
+    F --> G[LLM Local Extraction Ollama]
+    G --> H[Verification Cloud LLM Gate]
+    H --> I[Matching Semantic Embedding Score]
+    I --> J[State SQLite Deduplication]
+    J --> K[Alert Telegram Notification]
+    K --> L[Cleanup 24h Data Retention]
 ```
 
 ---
