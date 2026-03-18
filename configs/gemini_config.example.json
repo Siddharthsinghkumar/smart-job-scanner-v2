@@ -1,0 +1,8 @@
+{
+  "google_api_keys": [],
+  "api_key_labels": [],
+  "serpapi_key": "YOUR_SERPAPI_KEY_IF_ANY",
+  "google_search_api_key": "YOUR_GOOGLE_CUSTOM_SEARCH_API_KEY_IF_ANY",
+  "google_search_cx": "YOUR_CUSTOM_SEARCH_ENGINE_ID",
+  "num_results": 3
+}
