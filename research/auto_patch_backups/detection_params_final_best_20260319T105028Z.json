@@ -1,0 +1,8 @@
+{
+  "contour_area_min": 1200,
+  "contour_area_max": 500000,
+  "aspect_ratio_min": 0.5,
+  "aspect_ratio_max": 5.0,
+  "block_merge_distance": 40,
+  "morphology_kernel_size": 5
+}

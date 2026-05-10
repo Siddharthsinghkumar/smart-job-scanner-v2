@@ -1,0 +1,29 @@
+dataset:
+  yaml_path: data/yolo_stage2_v3/dataset.yaml
+
+train:
+  model: yolov8n.pt
+  epochs: 30
+  imgsz: 1280
+  batch: 4
+  device: cpu
+  workers: 0
+  seed: 20260331
+  project: artifacts/stage2_yolo_v3/runs
+  name: baseline
+  pretrained: true
+  cache: false
+  deterministic: true
+  patience: 15
+  close_mosaic: 10
+  optimizer: auto
+  lr0: 0.01
+  verbose: true
+
+inference:
+  model_path: artifacts/stage2_yolo_v3/best.pt
+  conf_threshold: 0.2
+  iou_threshold: 0.5
+  max_det: 300
+  imgsz: 1280
+  device: cpu

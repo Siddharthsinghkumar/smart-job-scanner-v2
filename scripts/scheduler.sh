@@ -61,7 +61,8 @@ run_job_by_idx() {
   local idx=$1
   local id="${IDS[idx]}"
   local cwd="${CWDS[idx]}"
-  local cmd="${CMDS[idx]}"
+  local cmd
+  cmd="$(bridge_pipeline_cmd "${CMDS[idx]}")"
   local logfile="$LOG_DIR/${id}_$(date +%Y%m%d_%H%M%S).log"
 
   log "Immediate run -> $id (cwd=$cwd) : $cmd"
@@ -102,6 +103,19 @@ find_job_idx() {
     fi
   done
   return 1
+}
+
+# Bridge legacy commands that still reference run_pipeline.sh.
+bridge_pipeline_cmd() {
+  local cmd="$1"
+  if [[ "$cmd" == *"scripts/run_pipeline.sh"* && -f "$PROJECT_ROOT/scripts/run_pipeline.py" ]]; then
+    local py_bin="$PROJECT_ROOT/4_env/bin/python"
+    [[ -x "$py_bin" ]] || py_bin="python3"
+    cmd="${cmd//scripts\/run_pipeline.sh/scripts\/run_pipeline.py}"
+    cmd="${cmd//\"$PROJECT_ROOT\/scripts\/run_pipeline.py/\"$py_bin $PROJECT_ROOT\/scripts\/run_pipeline.py}"
+    cmd="${cmd// scripts\/run_pipeline.py/ $py_bin scripts\/run_pipeline.py}"
+  fi
+  echo "$cmd"
 }
 
 # --- TIME-AWARE STARTUP CONDITIONAL LOGIC ---
@@ -203,7 +217,7 @@ while true; do
     if (( nr != 0 && nr <= ts )); then
       id="${IDS[idx]}"
       cwd="${CWDS[idx]}"
-      cmd="${CMDS[idx]}"
+      cmd="$(bridge_pipeline_cmd "${CMDS[idx]}")"
       logfile="$LOG_DIR/${id}_$(date +%Y%m%d_%H%M%S).log"
 
       log "Running job: $id (scheduled)"

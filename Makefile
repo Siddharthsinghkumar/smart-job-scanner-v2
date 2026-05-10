@@ -1,13 +1,17 @@
-.PHONY: run dry-run test health
+.PHONY: run dry-run test-run test health
+PYTHON ?= ./4_env/bin/python
 
 run:
-	./scripts/run_pipeline.sh
+	$(PYTHON) scripts/run_pipeline.py
 
 dry-run:
-	./scripts/run_pipeline.sh --dry-run
+	$(PYTHON) scripts/run_pipeline.py --dry-run
+
+test-run:
+	$(PYTHON) scripts/run_pipeline.py --test-run
 
 test:
-	./4_env/bin/python -m pytest -q
+	$(PYTHON) -m pytest -q
 
 health:
-	./4_env/bin/python scripts/health_check.py
+	$(PYTHON) scripts/health_check.py

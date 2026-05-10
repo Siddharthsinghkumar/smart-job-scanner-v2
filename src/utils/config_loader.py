@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Centralized configuration loading with backward-compatible fallback paths."""
+"""Centralized configuration loading from configs/."""
 
 from __future__ import annotations
 
@@ -12,11 +12,7 @@ CONFIGS_DIR = PROJECT_ROOT / 'configs'
 
 
 def resolve_config_path(filename: str) -> Path:
-    preferred = CONFIGS_DIR / filename
-    legacy = PROJECT_ROOT / filename
-    if preferred.exists():
-        return preferred
-    return legacy
+    return CONFIGS_DIR / filename
 
 
 def load_json_config(filename: str):

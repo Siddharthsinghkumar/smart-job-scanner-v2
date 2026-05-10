@@ -651,6 +651,13 @@ def init_database():
             skipped_fast BOOLEAN DEFAULT FALSE
         )
     ''')
+    
+    # 🆕 SCHEMA MIGRATION: Ensure 'skipped_fast' exists for older DBs
+    try:
+        cursor.execute("ALTER TABLE processed_files ADD COLUMN skipped_fast BOOLEAN DEFAULT FALSE")
+    except sqlite3.OperationalError:
+        pass # Column already exists
+    
     conn.commit()
     conn.close()
 
@@ -745,7 +752,7 @@ def wait_for_model(max_wait=60, endpoint=None):
             res = get_session().post(
                 endpoint,
                 json={"model": OLLAMA_MODEL, "prompt": "Say hello", "stream": False},
-                timeout=3
+                timeout=30 # Increased to 30s to allow for initial model load
             )
             if res.status_code == 200:
                 logging.info(f"✅ Model at {endpoint} is ready.")

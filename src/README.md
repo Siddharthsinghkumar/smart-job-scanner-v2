@@ -4,22 +4,22 @@
 These are used by `run_pipeline.sh`, `scheduler.sh`, `jobs.conf`, or imported by those stage scripts.
 
 ### Actual production execution order
-- Scheduled at `11:50` daily: `12_auto_download_pdfs.py` (downloader job)
-- Scheduled at `23:30` daily: `run_pipeline.sh --force`, which executes:
-  - `1_pdf_to_images.py`
-  - `2_run_smart_detector_batch.py`
-  - `3_block_refiner.py`
-  - `4_gpu_multilang_easyocr_working_slow_but_accurate.py`
-  - `5_argos_translate_batch.py`
-  - `6_create_batches_for_ollama.py`
-  - `7_final_ollama_pipeline.py --no-hybrid`
-  - `8_post_processing.py`
-  - `9-1_dynamic_resumes_full.py`
-  - `9-2_local_filter.py`
-  - `9-4_llm_search.py`
-  - `9-5_generate_shortlist_latest.py`
-  - `10_notify_shortlist_telegram.py`
-  - `11_cleanup_data.py`
+- Scheduled at `11:50` daily: `src/downloader/newspaper_downloader.py`
+- Scheduled at `23:30` daily: `scripts/run_pipeline.py --force`, which executes:
+  - `src/pipeline/stage01_pdf_to_images.py`
+  - `src/pipeline/stage02_block_detection.py`
+  - `src/pipeline/stage03_block_refiner.py`
+  - `src/pipeline/stage04_ocr.py`
+  - `src/pipeline/stage05_translation.py`
+  - `src/pipeline/stage06_batch_builder.py`
+  - `src/pipeline/stage07_llm_extraction.py --no-hybrid`
+  - `src/pipeline/stage08_post_processing.py`
+  - `src/pipeline/stage09_dynamic_resumes.py`
+  - `src/pipeline/stage09_local_filter.py`
+  - `src/pipeline/stage09_llm_filter.py`
+  - `src/pipeline/stage09_shortlist.py`
+  - `src/pipeline/stage10_notification.py`
+  - `src/pipeline/stage11_cleanup.py`
 
 `run_pipeline.sh` writes stage logs to `logs/` and completion markers to `run_state/*.done`.
 

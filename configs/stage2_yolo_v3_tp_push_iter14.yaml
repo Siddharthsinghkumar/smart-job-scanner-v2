@@ -1,0 +1,21 @@
+dataset:
+  yaml_path: data/yolo_stage2_v3/dataset.yaml
+
+train:
+  model: yolov8n.pt
+  epochs: 20
+  imgsz: 1280
+  batch: 4
+  device: cpu
+  workers: 0
+  seed: 20260403
+  project: artifacts/stage2_yolo_v3/runs
+  name: tp_push_iter14
+  pretrained: true
+  cache: false
+  deterministic: true
+  patience: 10
+  close_mosaic: 10
+  optimizer: auto
+  lr0: 0.01
+  verbose: true

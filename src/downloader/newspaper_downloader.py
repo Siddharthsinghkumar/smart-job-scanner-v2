@@ -139,9 +139,6 @@ class CompleteNewspaperDownloader:
         if config_file is None:
             config_file = os.getenv("NEWSPAPER_CONFIG_PATH", str(resolve_config_path("newspaper_config.json")))
         config_path = Path(config_file)
-        if not config_path.exists():
-            # Backward-compatible fallback for legacy layout.
-            config_path = Path("newspaper_config.json")
         self.config = self.load_config(str(config_path))
         self.batch_size = batch_size
         self.max_preprocess_workers = max_preprocess_workers

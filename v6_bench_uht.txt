@@ -1,0 +1,30 @@
+🚀 v6.9 High-Util Engine: UHT Delhi 07-04.pdf
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[CPU] Page 19 ready.
+[CPU] Page 20 ready.
+[CPU] Page 21 ready.
+[CPU] Page 22 ready.
+[CPU] Page 15 ready.
+[CPU] Page 16 ready.
+[CPU] Page 17 ready.
+[CPU] Page 18 ready.
+[CPU] Page 23 ready.
+[CPU] Page 24 ready.
+[CPU] Page 25 ready.
+[CPU] Page 26 ready.
+[CPU] Page 11 ready.
+[CPU] Page 12 ready.
+[CPU] Page 13 ready.
+[CPU] Page 14 ready.
+[CPU] Page 1 ready.
+[CPU] Page 2 ready.
+[CPU] Page 3 ready.
+[CPU] Page 4 ready.
+[CPU] Page 5 ready.
+[CPU] Page 6 ready.
+[CPU] Page 7 ready.
+[CPU] Page 8 ready.
+[CPU] Page 9 ready.
+[CPU] Page 10 ready.
+✅ v6.9 Complete: 3092 ads in 56.37s

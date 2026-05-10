@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+"""Train detector-pivot one-class YOLO model using the existing Stage2 v3 trainer."""
+
+from __future__ import annotations
+
+import argparse
+import shlex
+import subprocess
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.utils.detector_device import resolve_device_with_preflight
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Train detector-pivot YOLO baseline")
+    parser.add_argument("--config", default="configs/detector_pivot_yolo_v1.yaml", help="Pivot training config YAML")
+    parser.add_argument("--dataset-yaml", default=None, help="Override dataset YAML path")
+    parser.add_argument(
+        "--output-report",
+        default="run_state/detector_pivot_training_report.json",
+        help="Training report output JSON",
+    )
+    parser.add_argument(
+        "--weights-out",
+        default="artifacts/detector_pivot_yolo_v1/best.pt",
+        help="Stable best checkpoint path",
+    )
+    parser.add_argument(
+        "--last-weights-out",
+        default="artifacts/detector_pivot_yolo_v1/last.pt",
+        help="Stable last checkpoint path",
+    )
+    parser.add_argument(
+        "--device",
+        default="auto",
+        help="Execution device request: auto | cpu | 0 | cuda:0 (or other raw backend string)",
+    )
+    parser.add_argument(
+        "--device-preflight-report",
+        default="run_state/detector_pivot_device_preflight.json",
+        help="Device preflight report JSON path",
+    )
+    parser.add_argument("--dry-run", action="store_true", help="Print command without launching training")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    preflight = resolve_device_with_preflight(
+        requested_device=args.device,
+        context="detector_pivot_train",
+        preflight_report_path=(PROJECT_ROOT / args.device_preflight_report),
+    )
+    selected_device = str(preflight.get("selected_device", "cpu"))
+
+    cmd = [
+        sys.executable,
+        "tools/train_stage2_yolo.py",
+        "--config",
+        args.config,
+        "--output-report",
+        args.output_report,
+        "--weights-out",
+        args.weights_out,
+        "--last-weights-out",
+        args.last_weights_out,
+        "--device",
+        selected_device,
+        "--requested-device",
+        str(args.device),
+        "--device-preflight-json",
+        str((PROJECT_ROOT / args.device_preflight_report).resolve()),
+    ]
+    if args.dataset_yaml:
+        cmd.extend(["--dataset-yaml", args.dataset_yaml])
+
+    command_preview = " ".join(shlex.quote(part) for part in cmd)
+    command_file = PROJECT_ROOT / "run_state" / "detector_pivot_training_command.txt"
+    command_file.parent.mkdir(parents=True, exist_ok=True)
+    command_file.write_text(command_preview + "\n", encoding="utf-8")
+
+    print(
+        "device_preflight: "
+        f"requested={args.device} selected={selected_device} mode={preflight.get('execution_mode')} "
+        f"cuda_available={preflight.get('torch', {}).get('cuda_is_available')}"
+    )
+    print(f"device_preflight_report: {(PROJECT_ROOT / args.device_preflight_report).resolve()}")
+    print(f"training_command: {command_preview}")
+    print(f"training_command_file: {command_file}")
+
+    if args.dry_run:
+        return 0
+
+    proc = subprocess.run(cmd, cwd=str(PROJECT_ROOT), check=False)  # noqa: S603
+    return int(proc.returncode)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

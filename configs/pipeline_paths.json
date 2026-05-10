@@ -1,0 +1,9 @@
+{
+  "paths": {
+    "pdf_input": "data/raw_pdfs",
+    "images_output": "data/pdf2img",
+    "blocks_output": "data/job_blocks_smart",
+    "refined_output": "data/job_blocks_refined",
+    "detections_output": "run_state/detections"
+  }
+}

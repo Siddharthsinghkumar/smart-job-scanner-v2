@@ -4,10 +4,13 @@ from pathlib import Path
 import os
 import shlex
 import subprocess
+import sys
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 RUN_PIPELINE = PROJECT_ROOT / "scripts" / "run_pipeline.sh"
+RUN_PIPELINE_PY = PROJECT_ROOT / "scripts" / "run_pipeline.py"
+VENV_PYTHON = PROJECT_ROOT / "4_env" / "bin" / "python"
 SCHEDULER = PROJECT_ROOT / "scripts" / "scheduler.sh"
 JOBS_CONF = PROJECT_ROOT / "scripts" / "jobs.conf"
 
@@ -106,6 +109,21 @@ def test_run_pipeline_supports_dry_run_flag():
     content = RUN_PIPELINE.read_text(encoding="utf-8")
     assert "--dry-run" in content, "scripts/run_pipeline.sh must support --dry-run"
     assert "run_dry_run" in content, "scripts/run_pipeline.sh dry-run path is missing"
+
+
+def test_python_runner_exists_and_dry_run_works():
+    assert RUN_PIPELINE_PY.is_file(), f"Missing script: {RUN_PIPELINE_PY}"
+    python_bin = str(VENV_PYTHON if VENV_PYTHON.is_file() else Path(sys.executable))
+    result = subprocess.run(  # noqa: S603
+        [python_bin, str(RUN_PIPELINE_PY), "--dry-run"],  # noqa: S607
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, (
+        f"scripts/run_pipeline.py --dry-run failed: {result.stderr.strip()}"
+    )
+    assert "Dry-run mode enabled" in result.stdout
 
 
 def test_jobs_conf_command_scripts_resolve():

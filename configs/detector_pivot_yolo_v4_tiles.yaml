@@ -1,0 +1,29 @@
+dataset:
+  yaml_path: data/yolo_job_ad_pivot_v4_tiles/dataset.yaml
+
+train:
+  model: yolov8n.pt
+  epochs: 28
+  imgsz: 896
+  batch: 4
+  device: auto
+  workers: 2
+  seed: 20260407
+  project: artifacts/detector_pivot_yolo_v4_tiles/runs
+  name: baseline_v4_fp_focus
+  pretrained: true
+  cache: false
+  deterministic: true
+  patience: 16
+  close_mosaic: 8
+  optimizer: auto
+  lr0: 0.008
+  verbose: true
+
+inference:
+  model_path: artifacts/detector_pivot_yolo_v4_tiles/best.pt
+  conf_threshold: 0.022
+  iou_threshold: 0.5
+  max_det: 1500
+  imgsz: 1024
+  device: auto

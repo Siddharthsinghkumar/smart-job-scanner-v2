@@ -1,0 +1,13 @@
+07b4b72f0d2fd23d6ad6a80472c1ed16  data/benchmark_13_raw/FE-Delhi 07-04.pdf
+2117a5aeec57955be8961577a2b808ac  data/benchmark_13_raw/Free Press-Mumbai 07-04.pdf
+2ca9dd713e7a952aef962afe51e9f867  data/benchmark_13_raw/TOI-Delhi 07-04.pdf
+2f41cafff83e9c99450148fdf04a7407  data/benchmark_13_raw/ET-Delhi 07-04.pdf
+6c89d4921de0fbff0f67c4b203385a62  data/benchmark_13_raw/Mint Delhi 07-04.pdf
+78d1b8baa9032d9248f3ada0583b11f7  data/benchmark_13_raw/Orissa-Post-07-04.pdf
+881ea873cca8c3ea6cba5275a86794c8  data/benchmark_13_raw/UHT Delhi 07-04.pdf
+8a882f00d80936fb6d702134d4219df2  data/benchmark_13_raw/BS English-Delhi 07-04.pdf
+8b3e8f0fc3726b6c283947807d6b1003  data/benchmark_13_raw/TH- Delhi 07-04.pdf
+cff8d5c40150ed43d8469aff47fdf968  data/benchmark_13_raw/IE-Delhi 07-04.pdf
+dbd0b5e67bceaeac2c4246556a1353c8  data/benchmark_13_raw/The Tribune Delhi 07-04.pdf
+dc1d1a96de0de1b58fa85b3af9762f3b  data/benchmark_13_raw/NIE Chennai 07-04.pdf
+eb76b1195abd53de80ce15bc6bc9a616  data/benchmark_13_raw/Statesman-Delhi 07-04.pdf

@@ -44,7 +44,10 @@ KEEP_ITEMS = {
     "Jobs_found_final",
     
     # Shortlists directory (important)
-    "shortlists"
+    "shortlists",
+
+    # Frozen benchmark assets used for TP evaluation integrity
+    "benchmark_images",
 }
 
 # Directories to CLEAN (delete contents but keep folder structure)

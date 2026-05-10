@@ -1,0 +1,77 @@
+[CONFIG]
+pdf_input = data/raw_pdfs
+images_output = data/pdf2img
+manifest_output = run_state/stage1_page_identity_manifest.json
+workers = 4
+dynamic_dpi = True
+skip_existing = False
+move_processed = True
+[→] Found 1 PDF(s). Using up to 4 process(es), dynamic threads per PDF, dynamic DPI = True
+📄 BS English-Delhi 07-04.pdf
+   Pages: 20 | Dynamic DPI: True | Skip existing: False
+   Time: 6.37s (0.32s/page)
+   Fallback pages: 0 | Failed: 0 | Stale removed: 0
+✅ Output: data/pdf2img/BS English-Delhi 07-04
+
+🧾 Stage1 manifest written: run_state/stage1_page_identity_manifest.json
+📋 Page manifest JSONL written: run_state/page_manifest.jsonl (20 pages)
+Stage1 manifest validation OK: 20 pages, all images present, all page_ids unique
+🏁 Total time: 6.98s
+[CONFIG]
+images_output = data/pdf2img
+blocks_output = data/job_blocks_smart
+detections_output = run_state/detections
+page_manifest = run_state/page_manifest.jsonl
+crops_output = data/crops
+📋 Loaded 20 pages from manifest
+🔁 Collecting images...
+🚀 Using 6 parallel workers on 20 pages...
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p13.png
+[✓] Detected 6 legacy smart blocks from page BS English-Delhi 07-04_p13
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p16.png
+[✓] Detected 0 legacy smart blocks from page BS English-Delhi 07-04_p16
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p3.png
+[✓] Detected 1 legacy smart blocks from page BS English-Delhi 07-04_p3
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p14.png
+[✓] Detected 21 legacy smart blocks from page BS English-Delhi 07-04_p14
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p18.png
+[✓] Detected 1 legacy smart blocks from page BS English-Delhi 07-04_p18
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p5.png
+[✓] Detected 5 legacy smart blocks from page BS English-Delhi 07-04_p5
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p11.png
+[✓] Detected 5 legacy smart blocks from page BS English-Delhi 07-04_p11
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p17.png
+[✓] Detected 2 legacy smart blocks from page BS English-Delhi 07-04_p17
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p4.png
+[✓] Detected 24 legacy smart blocks from page BS English-Delhi 07-04_p4
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p9.png
+[✓] Detected 13 legacy smart blocks from page BS English-Delhi 07-04_p9
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p10.png
+[✓] Detected 4 legacy smart blocks from page BS English-Delhi 07-04_p10
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p2.png
+[✓] Detected 20 legacy smart blocks from page BS English-Delhi 07-04_p2
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p6.png
+[✓] Detected 8 legacy smart blocks from page BS English-Delhi 07-04_p6
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p12.png
+[✓] Detected 11 legacy smart blocks from page BS English-Delhi 07-04_p12
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p15.png
+[✓] Detected 12 legacy smart blocks from page BS English-Delhi 07-04_p15
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p19.png
+[✓] Detected 2 legacy smart blocks from page BS English-Delhi 07-04_p19
+[✓] Debug image saved: data/job_blocks_smart/BS English-Delhi 07-04/debug_p8.png
+[✓] Detected 12 legacy smart blocks from page BS English-Delhi 07-04_p8
+📋 Crop manifest written: run_state/crop_manifest.jsonl (161 crops)
+[✓] Crop manifest validation passed (161 crops)
+
+========== SUMMARY ==========
+🏁 Total time: 1.43s
+📄 Total PDFs processed: 1
+🧾 Total pages scanned: 20
+✅ Processed: 20
+⏩ Skipped: 0
+❌ Failed: 0
+🖼️  Total crops saved: 161
+==============================
+[✓] Log saved to logs/smart_block_detector_parallel_2026_04_22_03_31.log
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]

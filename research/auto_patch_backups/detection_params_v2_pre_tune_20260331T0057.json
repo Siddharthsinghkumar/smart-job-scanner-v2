@@ -1,0 +1,23 @@
+{
+  "min_area": 1200,
+  "max_area": 250000,
+  "min_width": 55,
+  "min_height": 28,
+  "max_box_area_ratio": 0.22,
+  "max_box_height_ratio": 0.42,
+  "column_gap_density_threshold": 0.04,
+  "column_min_width_ratio": 0.14,
+  "column_gap_min_width": 14,
+  "row_blank_density_ratio": 0.012,
+  "row_gap_min_height": 12,
+  "row_min_height": 26,
+  "segment_min_width": 70,
+  "segment_expand_px": 4,
+  "merge_iou_threshold": 0.62,
+  "merge_gap_px": 6,
+  "min_fill_density": 0.012,
+  "max_fill_density": 0.52,
+  "header_exclude_ratio": 0.04,
+  "footer_exclude_ratio": 0.03,
+  "debug_draw_scores": 1
+}
