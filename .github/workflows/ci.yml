@@ -1,0 +1,74 @@
+name: Unified CI Pipeline
+
+on:
+  push:
+    branches:
+      - dev-exp
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: chartboost/ruff-action@v1
+        with:
+          args: 'check src/' # Scoped to src/ to keep requirements minimal
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pypa/gh-action-pip-audit@v1.0.8
+        with:
+          inputs: requirements.txt
+
+  test_and_e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+      - name: Setup Configs
+        run: |
+          cp configs/gemini_config.example.json configs/gemini_config.json
+          cp configs/newspaper_config.example.json configs/newspaper_config.json
+      - name: Run Tests
+        run: pytest -q
+      - name: Run E2E Dry-Run
+        run: python scripts/run_pipeline.py --dry-run
+
+  ragas_eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: |
+          pip install -r requirements.txt
+          python scripts/evaluate_retrieval.py
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+  auto_merge:
+    needs: [lint, audit, test_and_e2e, ragas_eval]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Auto-merge to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout main || git checkout -b main
+          git merge --ff-only dev-exp
+          git push origin main
