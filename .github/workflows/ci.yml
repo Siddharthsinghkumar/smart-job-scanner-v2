@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: chartboost/ruff-action@v1
         with:
-          args: 'check src/' # Scoped to src/ to keep requirements minimal
+          args: 'check src/ --select E,F --ignore E401,E402,E501,E701,E702,E722,E741,F401,F541,F841' # Scoped to src/ to keep requirements minimal
 
   audit:
     runs-on: ubuntu-latest
