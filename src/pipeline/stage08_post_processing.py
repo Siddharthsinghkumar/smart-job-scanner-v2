@@ -19,7 +19,7 @@ timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M")
 log_name = f"deduplication_{timestamp}.log"
 
 # File logger (all details)
-s [%(levelname)s] %(message)s",
+logging.basicConfig(format="%(asctime)s [%(levelname)s] %(message)s",
     level=logging.INFO,
 )
 

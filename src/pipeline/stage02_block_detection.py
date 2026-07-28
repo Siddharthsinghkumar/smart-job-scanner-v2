@@ -37,7 +37,7 @@ log_dir.mkdir(parents=True, exist_ok=True)
 timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M")
 log_file = log_dir / f"smart_block_detector_parallel_{timestamp}.log"
 
-s - %(levelname)s - %(message)s",
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s",
     level=logging.INFO,
 )
 

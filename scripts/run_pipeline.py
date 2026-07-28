@@ -135,6 +135,10 @@ def validate_configs(check_python: str) -> None:
 
 
 def validate_required_dirs() -> None:
+    # Auto-create state directories
+    for path_name in ["data", "logs", "run_state"]:
+        (PROJECT_ROOT / path_name).mkdir(parents=True, exist_ok=True)
+
     required = [
         PROJECT_ROOT / "src",
         PROJECT_ROOT / "src" / "pipeline",

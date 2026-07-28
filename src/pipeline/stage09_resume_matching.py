@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Composite stage that preserves historical Stage-9 behavior.
 
@@ -9,8 +11,6 @@ Runs the original Stage-9 sub-steps in the same order:
 """
 from src.utils.logging_utils import configure_logging
 logger = configure_logging("stage09_resume_matching")
-
-from __future__ import annotations
 
 import subprocess
 import sys

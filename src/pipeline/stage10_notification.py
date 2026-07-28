@@ -63,7 +63,7 @@ def setup_logging():
     """Configure comprehensive logging to file and console"""
     log_filename = LOG_DIR / f"telegram_notify_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
     
-    s [%(levelname)-8s] %(message)s",
+    logging.basicConfig(format="%(asctime)s [%(levelname)-8s] %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
         handlers=[
             logging.FileHandler(log_filename, encoding='utf-8'),

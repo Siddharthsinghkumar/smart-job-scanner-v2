@@ -25,4 +25,6 @@ jobs:
 
       - name: Run validation
         run: |
+          cp configs/gemini_config.example.json configs/gemini_config.json
+          cp configs/newspaper_config.example.json configs/newspaper_config.json
           pytest -q

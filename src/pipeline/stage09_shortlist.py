@@ -12,7 +12,7 @@ LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
 log_file = LOG_DIR / f"smart_shortlist_{datetime.now():%Y_%m_%d_%H_%M}.log"
 
-s [%(levelname)s] %(message)s",
+logging.basicConfig(format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 

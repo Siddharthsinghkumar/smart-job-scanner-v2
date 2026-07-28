@@ -38,7 +38,7 @@ CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 # ───── Logging Setup ─────
 log_file = LOG_DIR / f"dynamic_resumes_{datetime.now().strftime('%Y_%m_%d_%H_%M')}.log"
-s [%(levelname)s] %(message)s",
+logging.basicConfig(format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
         logging.FileHandler(log_file, mode="w"),
         logging.StreamHandler()
