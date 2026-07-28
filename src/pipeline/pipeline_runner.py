@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import shlex
+import signal
 import subprocess
 import sys
 import time
@@ -148,16 +149,43 @@ def _validate_prereqs(commands: list[str]) -> None:
             raise FileNotFoundError(f"Missing stage script: {script_rel}")
 
 
+_active_process: subprocess.Popen | None = None
+_shutdown_requested = False
+
+def _signal_handler(sig, frame):
+    global _shutdown_requested
+    _shutdown_requested = True
+    sig_name = signal.Signals(sig).name
+    print(f"\n[!] Received {sig_name}, initiating graceful shutdown...")
+    if _active_process and _active_process.poll() is None:
+        _active_process.terminate()
+        try:
+            _active_process.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            _active_process.kill()
+    _append_structured_log("pipeline", "interrupted", 0.0, 0)
+    _update_metrics("pipeline", "interrupted", 0.0, 0)
+    sys.exit(128 + sig)
+
+signal.signal(signal.SIGINT, _signal_handler)
+signal.signal(signal.SIGTERM, _signal_handler)
+
+
 def _run_stage(python_bin: str, command: str) -> int:
+    global _active_process
     parts = shlex.split(command)
     script_rel, args = parts[0], parts[1:]
     script_abs = PROJECT_ROOT / script_rel
     cmd = [python_bin, "-u", str(script_abs), *args]
     if script_rel.endswith("stage11_cleanup.py"):
-        result = subprocess.run(cmd, input="y\n", text=True, check=False)  # noqa: S603
+        _active_process = subprocess.Popen(cmd, stdin=subprocess.PIPE, text=True)
+        _active_process.communicate(input="y\n")
+        rc = _active_process.returncode
     else:
-        result = subprocess.run(cmd, check=False)  # noqa: S603
-    return result.returncode
+        _active_process = subprocess.Popen(cmd)
+        rc = _active_process.wait()
+    _active_process = None
+    return rc
 
 
 def main() -> int:
