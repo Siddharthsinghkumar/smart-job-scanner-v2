@@ -8,6 +8,28 @@ import os
 import argparse
 from pathlib import Path
 from datasets import Dataset
+
+# Monkeypatch for ragas compatibility with newer langchain versions
+import sys, types
+try:
+    import langchain_community
+    if not hasattr(langchain_community, "chat_models"):
+        langchain_community.chat_models = types.ModuleType("chat_models")
+        sys.modules["langchain_community.chat_models"] = langchain_community.chat_models
+    if not hasattr(langchain_community.chat_models, "vertexai"):
+        vertexai = types.ModuleType("vertexai")
+        vertexai.ChatVertexAI = type("ChatVertexAI", (object,), {})
+        langchain_community.chat_models.vertexai = vertexai
+        sys.modules["langchain_community.chat_models.vertexai"] = vertexai
+        
+    import langchain_core
+    if not hasattr(langchain_core, "pydantic_v1"):
+        import pydantic.v1 as pydantic_v1
+        langchain_core.pydantic_v1 = pydantic_v1
+        sys.modules["langchain_core.pydantic_v1"] = pydantic_v1
+except Exception:
+    pass
+
 from ragas import evaluate
 from ragas.metrics import answer_relevancy, context_precision
 from langchain_openai import ChatOpenAI

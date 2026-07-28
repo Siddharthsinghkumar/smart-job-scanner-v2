@@ -27,7 +27,7 @@ EXPECTED_ORCHESTRATION_FILES = [
 
 EXPECTED_INFRA_FILES = [
     "scripts/health_check.py",
-    ".github/workflows/tests.yml",
+    ".github/workflows/ci.yml",
     "Makefile",
     "requirements-dev.txt",
     "data/pipeline_metrics.json",
