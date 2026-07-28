@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # test_gemini_models.py
 import google.generativeai as genai
+import os
 
-API_KEY = "fu"  # Your actual key
+API_KEY = os.getenv("GOOGLE_API_KEY", "REPLACE_WITH_GOOGLE_API_KEY")
 
 def test_all_models_for_status(): # Renamed the function for clarity
     genai.configure(api_key=API_KEY)

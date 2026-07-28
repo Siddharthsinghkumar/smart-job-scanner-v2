@@ -1,0 +1,28 @@
+{
+  "web_sources": {
+    "economic_times": {
+      "url": "https://epaperwave.com/download-the-economic-times-pdf-newspaper-free/",
+      "date_format": "%d-%m-%Y",
+      "link_text": "click here to download"
+    }
+  },
+  "telegram_sources": {
+    "newspaper_wave_10": {
+      "channel_id": -1002797473616,
+      "api_id": "",
+      "api_hash": "",
+      "newspapers": {
+        "IE": ["IE Delhi", "IE Chandigarh", "IE Lucknow", "Indian Express", "IE-Delhi"]
+      },
+      "days_back": 1
+    }
+  },
+  "direct_pdf_sources": {},
+  "settings": {
+    "download_dir": "data/raw_pdfs",
+    "headless": false,
+    "disable_javascript": true,
+    "timeout": 30,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+  }
+}

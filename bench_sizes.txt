@@ -1,0 +1,13 @@
+12659818 data/benchmark_13_raw/Mint
+12897491 data/benchmark_13_raw/FE-Delhi
+21382730 data/benchmark_13_raw/TH-
+21807836 data/benchmark_13_raw/Free
+31947530 data/benchmark_13_raw/Orissa-Post-07-04.pdf
+3340491 data/benchmark_13_raw/Statesman-Delhi
+34600065 data/benchmark_13_raw/BS
+39841214 data/benchmark_13_raw/UHT
+4402328 data/benchmark_13_raw/The
+72420870 data/benchmark_13_raw/ET-Delhi
+8421207 data/benchmark_13_raw/IE-Delhi
+8891800 data/benchmark_13_raw/NIE
+97731695 data/benchmark_13_raw/TOI-Delhi

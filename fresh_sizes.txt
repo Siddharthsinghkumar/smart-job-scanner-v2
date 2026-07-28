@@ -1,0 +1,13 @@
+12659818 data/validation-data/fresh-sparse-holdout-v1/rawpdf/Mint
+12897491 data/validation-data/fresh-sparse-holdout-v1/rawpdf/FE-Delhi
+21382730 data/validation-data/fresh-sparse-holdout-v1/rawpdf/TH-
+21807836 data/validation-data/fresh-sparse-holdout-v1/rawpdf/Free
+31947530 data/validation-data/fresh-sparse-holdout-v1/rawpdf/Orissa-Post-07-04.pdf
+3340491 data/validation-data/fresh-sparse-holdout-v1/rawpdf/Statesman-Delhi
+34600065 data/validation-data/fresh-sparse-holdout-v1/rawpdf/BS
+39841214 data/validation-data/fresh-sparse-holdout-v1/rawpdf/UHT
+4402328 data/validation-data/fresh-sparse-holdout-v1/rawpdf/The
+72420870 data/validation-data/fresh-sparse-holdout-v1/rawpdf/ET-Delhi
+8421207 data/validation-data/fresh-sparse-holdout-v1/rawpdf/IE-Delhi
+8891800 data/validation-data/fresh-sparse-holdout-v1/rawpdf/NIE
+97731695 data/validation-data/fresh-sparse-holdout-v1/rawpdf/TOI-Delhi

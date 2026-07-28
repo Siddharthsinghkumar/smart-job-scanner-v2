@@ -1,0 +1,276 @@
+#!/usr/bin/env python3
+"""Run detector-pivot YOLO inference and evaluate detector-stage metrics on frozen benchmark labels."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.utils.benchmark_images import (  # noqa: E402
+    DEFAULT_BENCHMARK_IMAGES_DIR,
+    DEFAULT_BENCHMARK_MANIFEST_PATH,
+    assert_benchmark_manifest_valid,
+)
+from src.utils.detector_device import resolve_device_with_preflight  # noqa: E402
+from tools.auto_improve_detector import _merge_labels_to_temp  # noqa: E402
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Evaluate detector-pivot YOLO model against frozen benchmark")
+    parser.add_argument("--labels-dir", default="data/test_labels", help="Label JSON directory (read-only)")
+    parser.add_argument(
+        "--images-dir",
+        default=str(DEFAULT_BENCHMARK_IMAGES_DIR.relative_to(PROJECT_ROOT)),
+        help="Frozen benchmark image root",
+    )
+    parser.add_argument(
+        "--benchmark-manifest",
+        default=str(DEFAULT_BENCHMARK_MANIFEST_PATH.relative_to(PROJECT_ROOT)),
+        help="Frozen benchmark manifest path",
+    )
+    parser.add_argument(
+        "--model-path",
+        default="artifacts/detector_pivot_yolo_v1/best.pt",
+        help="YOLO checkpoint to evaluate",
+    )
+    parser.add_argument("--confidence-threshold", type=float, default=0.05, help="YOLO confidence threshold")
+    parser.add_argument("--iou-threshold", type=float, default=0.5, help="YOLO inference NMS IoU threshold")
+    parser.add_argument("--max-detections", type=int, default=800, help="Maximum detections per page")
+    parser.add_argument("--imgsz", type=int, default=1024, help="YOLO inference image size")
+    parser.add_argument(
+        "--device",
+        default="auto",
+        help="Execution device request: auto | cpu | 0 | cuda:0 (or other raw backend string)",
+    )
+    parser.add_argument(
+        "--device-preflight-report",
+        default="run_state/detector_pivot_device_preflight.json",
+        help="Device preflight report JSON path",
+    )
+    parser.add_argument(
+        "--blocks-output",
+        default="data/job_blocks_smart_detector_pivot",
+        help="Block crop output root for pivot detector runs",
+    )
+    parser.add_argument(
+        "--detections-output",
+        default="run_state/detections_detector_pivot",
+        help="Detections output directory",
+    )
+    parser.add_argument(
+        "--merged-labels-output",
+        default="run_state/merged_labels_tmp_detector_pivot_eval.json",
+        help="Temporary merged labels path",
+    )
+    parser.add_argument(
+        "--details-output",
+        default="run_state/detector_pivot_eval_details_detector.json",
+        help="Per-page evaluation details output JSON",
+    )
+    parser.add_argument(
+        "--output",
+        default="run_state/detector_pivot_eval_report.json",
+        help="Top-level evaluation report output JSON",
+    )
+    parser.add_argument("--skip-predict", action="store_true", help="Skip inference and only evaluate existing detections")
+    parser.add_argument("--eval-iou-threshold", type=float, default=0.5, help="Evaluation IoU threshold")
+    return parser.parse_args()
+
+
+def _resolve(path: str) -> Path:
+    p = Path(path)
+    return p.resolve() if p.is_absolute() else (PROJECT_ROOT / p).resolve()
+
+
+def _to_rel(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(PROJECT_ROOT.resolve()))
+    except Exception:
+        return str(path.resolve())
+
+
+def _load_json(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _run_checked(cmd: list[str]) -> str:
+    proc = subprocess.run(  # noqa: S603
+        cmd,
+        cwd=str(PROJECT_ROOT),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"command failed rc={proc.returncode}: {' '.join(cmd)}\n"
+            f"stdout:\n{proc.stdout}\n\nstderr:\n{proc.stderr}"
+        )
+    return proc.stdout
+
+
+def _top_pages_by_miss(details: dict[str, Any], top_n: int = 10) -> list[dict[str, Any]]:
+    per_image = details.get("per_image", {})
+    if not isinstance(per_image, dict):
+        return []
+    rows: list[dict[str, Any]] = []
+    for page, payload in per_image.items():
+        if not isinstance(payload, dict):
+            continue
+        rows.append(
+            {
+                "page": str(page),
+                "ground_truth_count": int(payload.get("ground_truth_count", 0) or 0),
+                "prediction_count": int(payload.get("prediction_count", 0) or 0),
+                "true_positives": int(payload.get("true_positives", 0) or 0),
+                "missed_count": int(payload.get("missed_count", 0) or 0),
+                "false_positives_count": int(payload.get("false_positives_count", 0) or 0),
+            }
+        )
+    rows.sort(
+        key=lambda r: (
+            -int(r["missed_count"]),
+            -int(r["ground_truth_count"]),
+            int(r["true_positives"]),
+            str(r["page"]),
+        )
+    )
+    return rows[:top_n]
+
+
+def main() -> int:
+    args = parse_args()
+    labels_dir = _resolve(args.labels_dir)
+    images_dir = _resolve(args.images_dir)
+    benchmark_manifest = _resolve(args.benchmark_manifest)
+    model_path = _resolve(args.model_path)
+    blocks_output = _resolve(args.blocks_output)
+    detections_output = _resolve(args.detections_output)
+    merged_labels_output = _resolve(args.merged_labels_output)
+    details_output = _resolve(args.details_output)
+    output = _resolve(args.output)
+    device_preflight_report = _resolve(args.device_preflight_report)
+
+    if not labels_dir.is_dir():
+        raise SystemExit(f"labels directory not found: {labels_dir}")
+    if not images_dir.is_dir():
+        raise SystemExit(f"images directory not found: {images_dir}")
+    if not benchmark_manifest.is_file():
+        raise SystemExit(f"benchmark manifest not found: {benchmark_manifest}")
+    if not args.skip_predict and not model_path.is_file():
+        raise SystemExit(f"model checkpoint not found: {model_path}")
+
+    validation = assert_benchmark_manifest_valid(
+        benchmark_images_dir=images_dir,
+        manifest_path=benchmark_manifest,
+    )
+    preflight = resolve_device_with_preflight(
+        requested_device=args.device,
+        context="detector_pivot_eval",
+        preflight_report_path=device_preflight_report,
+    )
+    selected_device = str(preflight.get("selected_device", "cpu"))
+
+    predict_cmd = [
+        sys.executable,
+        "tools/predict_stage2_yolo.py",
+        "--images-dir",
+        str(images_dir),
+        "--benchmark-manifest",
+        str(benchmark_manifest),
+        "--validate-benchmark-images",
+        "--blocks-output",
+        str(blocks_output),
+        "--detections-output",
+        str(detections_output),
+        "--model-path",
+        str(model_path),
+        "--confidence-threshold",
+        str(float(args.confidence_threshold)),
+        "--iou-threshold",
+        str(float(args.iou_threshold)),
+        "--max-detections",
+        str(int(args.max_detections)),
+        "--imgsz",
+        str(int(args.imgsz)),
+        "--device",
+        selected_device,
+    ]
+    if not args.skip_predict:
+        _run_checked(predict_cmd)
+
+    merged_labels_output.parent.mkdir(parents=True, exist_ok=True)
+    _merge_labels_to_temp(labels_dir, merged_labels_output)
+
+    eval_cmd = [
+        sys.executable,
+        "tools/evaluate_against_labels.py",
+        "--labels",
+        str(merged_labels_output),
+        "--detections",
+        str(detections_output),
+        "--stage",
+        "detector",
+        "--iou-threshold",
+        str(float(args.eval_iou_threshold)),
+        "--output-details",
+        str(details_output),
+    ]
+    eval_stdout = _run_checked(eval_cmd)
+    metrics = json.loads(eval_stdout)
+    details_payload = _load_json(details_output)
+
+    report = {
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "inputs": {
+            "labels_dir": _to_rel(labels_dir),
+            "images_dir": _to_rel(images_dir),
+            "benchmark_manifest": _to_rel(benchmark_manifest),
+            "model_path": _to_rel(model_path),
+            "detections_output": _to_rel(detections_output),
+            "blocks_output": _to_rel(blocks_output),
+            "merged_labels_output": _to_rel(merged_labels_output),
+            "eval_iou_threshold": float(args.eval_iou_threshold),
+            "requested_device": str(args.device),
+            "selected_device": selected_device,
+            "execution_mode": str(preflight.get("execution_mode", "cpu")),
+            "device_preflight_report": _to_rel(device_preflight_report),
+        },
+        "benchmark_validation": {
+            "passed": bool(validation.get("validation_passed", False)),
+            "manifest_rows": int(validation.get("manifest_rows", 0) or 0),
+            "actual_image_files": int(validation.get("actual_image_files", 0) or 0),
+            "hash_mismatch_count": int(validation.get("hash_mismatch_count", 0) or 0),
+            "missing_file_count": int(validation.get("missing_file_count", 0) or 0),
+            "extra_file_count": int(validation.get("extra_file_count", 0) or 0),
+        },
+        "detector_metrics": metrics,
+        "device_preflight": preflight,
+        "top_pages_by_missed_count": _top_pages_by_miss(details_payload, top_n=12),
+        "commands": {
+            "predict": predict_cmd,
+            "evaluate": eval_cmd,
+        },
+        "notes": [
+            "This report evaluates detector-stage outputs only.",
+            "To compare Stage3 refined outputs, run tools/run_detection_pipeline.py with detector-version v3 and run_stagewise_evaluation.py on the same frozen benchmark assets.",
+        ],
+    }
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(json.dumps(report, indent=2, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

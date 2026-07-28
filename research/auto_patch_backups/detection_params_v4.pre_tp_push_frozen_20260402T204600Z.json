@@ -1,0 +1,20 @@
+{
+  "min_area": 900,
+  "min_width": 34,
+  "min_height": 20,
+  "max_box_area_ratio": 0.9,
+  "max_box_height_ratio": 0.99,
+  "column_gap_density_threshold": 0.012,
+  "column_gap_min_width": 6,
+  "column_min_width_ratio": 0.05,
+  "row_blank_density_ratio": 0.0025,
+  "row_gap_min_height": 4,
+  "row_min_height": 16,
+  "segment_min_width": 30,
+  "segment_expand_px": 12,
+  "xy_cut_max_depth": 10,
+  "expand_pixels": [0, 8, 16, 24, 32],
+  "nms_iou_threshold": 0.995,
+  "max_detections": 40,
+  "debug_draw_scores": 0
+}

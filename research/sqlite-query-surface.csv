@@ -1,0 +1,18 @@
+file,database,query_type,table_or_area,write_or_read,risk,notes
+src/pipeline/stage07_llm_extraction.py:637-654,data/processing_state.db,DDL (CREATE TABLE IF NOT EXISTS) + PRAGMA journal_mode=WAL + synchronous=NORMAL,processed_files,write,low,init_database(); the only WAL-enabled DB; timeout=30
+src/pipeline/stage07_llm_extraction.py:657-683,data/processing_state.db,INSERT OR REPLACE,processed_files,write,medium,mark_file_processed(): connection-per-file under threading.Lock; SKIPPED ENTIRELY when --force set (persistence-changing flag); datetime.now() bound via deprecated default adapter (py3.12)
+src/pipeline/stage07_llm_extraction.py:685-696,data/processing_state.db,SELECT file_path,processed_files,read,low,get_processed_files(); takes the write lock for reads (unnecessary serialization)
+src/pipeline/stage09_llm_filter.py:221-260,data/llm_results/llm_job_analysis.db,DDL + 5 CREATE INDEX,job_analysis,write,medium,init_db(): schema defined inline; 18 columns; UNIQUE(job_id)
+src/pipeline/stage09_llm_filter.py:262-300,data/llm_results/llm_job_analysis.db,INSERT OR REPLACE (18 cols),job_analysis,write,medium,save_to_db(): REPLACE semantics; error rows terminal (status='error' never re-driven); job_text truncated to 2000 chars
+src/pipeline/stage09_shortlist.py:34-49,data/shortlist_history.db,DDL,sent_jobs,write,medium,init_db(); table name misrepresents semantics (rows written pre-send F-012)
+src/pipeline/stage09_shortlist.py:51-55,data/shortlist_history.db,SELECT 1 WHERE job_id=?,sent_jobs,read,low,is_new_job() dedup probe
+src/pipeline/stage09_shortlist.py:57-75,data/shortlist_history.db,INSERT OR REPLACE,sent_jobs,write,high,log_job() at shortlist time; REPLACE can rewrite shortlisted_at and re-trigger stage10 watermark query
+src/pipeline/stage09_shortlist.py:77-86,data/shortlist_history.db,SELECT ... ORDER BY shortlisted_at DESC LIMIT ?,sent_jobs,read,low,history display
+src/pipeline/stage09_shortlist.py:281-290,data/shortlist_history.db,DELETE FROM sent_jobs,sent_jobs,write,medium,clear_history() utility — full wipe with no backup
+src/pipeline/stage10_notification.py:250-277,data/shortlist_history.db,SELECT ... WHERE shortlisted_at > ? ORDER BY shortlisted_at ASC,sent_jobs,read,high,get_new_jobs(): watermark comparison on TEXT timestamps; positional tuple consumption downstream (F-025)
+src/pipeline/stage10_notification.py:286-311,data/shortlist_history.db,SELECT ... ORDER BY shortlisted_at ASC,sent_jobs,read,medium,get_all_jobs(): copy-paste twin of get_new_jobs used by --force (resends everything ever)
+src/pipeline/stage10_notification.py:253-258+290-295,data/shortlist_history.db,SELECT name FROM sqlite_master,schema probe,read,low,only defensive schema check in the repo
+src/llm/gemini_client.py:588-623,data/gemini_interactions.db,DDL + INSERT,request_logs,write,medium,_log_to_sqlite(): connect + CREATE TABLE + INSERT + close PER REQUEST; default journal; duplicated by JSONL log; lock-contention candidate under threads (H-01)
+src/llm/gemini_client.py:1058-1077,caller-provided db,INSERT INTO interactions,interactions,write,low,process_request() optional path; table DDL never defined in this codebase (caller responsibility) — dead in production
+src/pipeline/stage11_cleanup.py:18-23,all three data DBs,file-level KEEP list,shortlist_history.db + gemini_interactions.db + processing_state.db,n/a,low,cleanup preserves DB files by name; a renamed/added DB would be deleted by the loose-file sweep
+progress.db (repo root),progress.db,none — zero code references,pages/backlog/worker_stats,n/a,low,orphaned legacy DB; archive or delete (F-033)

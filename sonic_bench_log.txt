@@ -1,0 +1,12 @@
+PDF Name                  | S2 TP | S3 TP | Time
+-------------------------------------------------------
+UHT Delhi 07-04           | 49    | 49    | 847.0s
+Mint Delhi 07-04          | 3     | 3     | 638.3s
+TH- Delhi 07-04           | 2     | 2     | 823.4s
+TOI-Delhi 07-04           | 4     | 4     | 1031.0s
+The Tribune Delhi 07-04   | 1     | 1     | 844.1s
+BS English-Delhi 07-04    | 1     | 1     | 849.5s
+ET-Delhi 07-04            | 0     | 0     | 649.3s
+FE-Delhi 07-04            | 0     | 0     | 1704.0s
+NIE Chennai 07-04         | 0     | 0     | 1279.9s
+Orissa-Post-07-04         | 0     | 0     | 406.9s

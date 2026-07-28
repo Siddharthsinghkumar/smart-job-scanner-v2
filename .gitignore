@@ -1,0 +1,71 @@
+# Secrets and local credentials
+.env
+.env.*
+!.env.example
+token_telegram/
+*.session
+telegram_session*.session
+configs/gemini_config.json
+configs/newspaper_config.json
+!configs/gemini_config.example.json
+!configs/newspaper_config.example.json
+
+# Python cache/build
+__pycache__/
+*.py[cod]
+*.so
+
+# Local environments and heavyweight local tool trees
+4_env/
+venv/
+.venv/
+pytorch/
+
+# Runtime logs/state/artifacts
+data/*
+logs/
+run_state/
+cache_blocks/
+resumes/
+newspaper_downloader.log
+gemini_interactions_log.json
+
+# Databases and runtime state files
+*.db
+progress.db
+data/**/*.db
+data/**/.key_*.json
+data/**/progress.json
+data/**/api_key_state*.json
+
+# Pipeline-generated data products
+data/raw_pdfs/
+data/processed_pdfs/
+data/pdf2img/
+data/job_blocks_smart/
+data/job_blocks_refined/
+data/refiner_skipped/
+data/block_texts/
+data/page_texts/
+data/all_eng_text/
+data/batch_inputs/
+data/batch_output/
+data/Jobs_found_final/
+data/dynamic_resumes/
+data/llm_results/
+data/shortlists/
+data/shortlisted_jobs_json/
+data/progress/
+data/telegram/
+!data/pipeline_metrics.json
+
+# Generic temp/debug artifacts
+*.log
+*.db
+*.deb
+*.png
+*.tmp
+*.part
+*.crdownload
+
+migrate_logging.py

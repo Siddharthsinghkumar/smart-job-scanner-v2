@@ -1,0 +1,30 @@
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+🚀 Launching v5.1 High-Recall Detector for UHT Delhi 07-04.pdf...
+  Page 1/26 | Tiled Detection (Hard Path)...
+  Page 2/26 | Tiled Detection (Hard Path)...
+  Page 3/26 | Digital Bypass (Easy Path)
+  Page 4/26 | Digital Bypass (Easy Path)
+  Page 5/26 | Digital Bypass (Easy Path)
+  Page 6/26 | Digital Bypass (Easy Path)
+  Page 7/26 | Tiled Detection (Hard Path)...
+  Page 8/26 | Digital Bypass (Easy Path)
+  Page 9/26 | Digital Bypass (Easy Path)
+  Page 10/26 | Digital Bypass (Easy Path)
+  Page 11/26 | Digital Bypass (Easy Path)
+  Page 12/26 | Digital Bypass (Easy Path)
+  Page 13/26 | Digital Bypass (Easy Path)
+  Page 14/26 | Digital Bypass (Easy Path)
+  Page 15/26 | Digital Bypass (Easy Path)
+  Page 16/26 | Digital Bypass (Easy Path)
+  Page 17/26 | Digital Bypass (Easy Path)
+  Page 18/26 | Digital Bypass (Easy Path)
+  Page 19/26 | Digital Bypass (Easy Path)
+  Page 20/26 | Digital Bypass (Easy Path)
+  Page 21/26 | Digital Bypass (Easy Path)
+  Page 22/26 | Digital Bypass (Easy Path)
+  Page 23/26 | Digital Bypass (Easy Path)
+  Page 24/26 | Digital Bypass (Easy Path)
+  Page 25/26 | Digital Bypass (Easy Path)
+  Page 26/26 | Digital Bypass (Easy Path)
+✅ v5.1 High-Recall Complete: 279 ads in 8.60s

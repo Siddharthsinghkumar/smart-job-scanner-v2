@@ -1,0 +1,82 @@
+data/benchmark_13_raw/BS English-Delhi 07-04.pdf
+data/benchmark_13_raw/ET-Delhi 07-04.pdf
+data/benchmark_13_raw/FE-Delhi 07-04.pdf
+data/benchmark_13_raw/Free Press-Mumbai 07-04.pdf
+data/benchmark_13_raw/IE-Delhi 07-04.pdf
+data/benchmark_13_raw/Mint Delhi 07-04.pdf
+data/benchmark_13_raw/NIE Chennai 07-04.pdf
+data/benchmark_13_raw/Orissa-Post-07-04.pdf
+data/benchmark_13_raw/Statesman-Delhi 07-04.pdf
+data/benchmark_13_raw/TH- Delhi 07-04.pdf
+data/benchmark_13_raw/The Tribune Delhi 07-04.pdf
+data/benchmark_13_raw/TOI-Delhi 07-04.pdf
+data/benchmark_13_raw/UHT Delhi 07-04.pdf
+data/benchmark_1_raw/BS English-Delhi 07-04.pdf
+data/continuum_test/BS English-Delhi 07-04.pdf
+data/continuum_test/ET-Delhi 07-04.pdf
+data/continuum_test/FE-Delhi 07-04.pdf
+data/continuum_test/Mint Delhi 07-04.pdf
+data/continuum_test/NIE Chennai 07-04.pdf
+data/continuum_test/Orissa-Post-07-04.pdf
+data/continuum_test/TH- Delhi 07-04.pdf
+data/continuum_test/The Tribune Delhi 07-04.pdf
+data/continuum_test/TOI-Delhi 07-04.pdf
+data/continuum_test/UHT Delhi 07-04.pdf
+data/final_audit/UHT Delhi 07-04.pdf
+data/processed_pdfs/BS -Delhi - 18-03-2026.pdf
+data/processed_pdfs/BS English-Delhi 07-04.pdf
+data/processed_pdfs/ET-Delhi 07-04.pdf
+data/processed_pdfs/ET Delhi 18-03.pdf
+data/processed_pdfs/FE-Delhi 07-04.pdf
+data/processed_pdfs/Free Press-Mumbai 07-04.pdf
+data/processed_pdfs/IE-Delhi 07-04.pdf
+data/processed_pdfs/Mint Delhi 07-04.pdf
+data/processed_pdfs/NIE Chennai 07-04.pdf
+data/processed_pdfs/Orissa-Post-07-04.pdf
+data/processed_pdfs/Statesman-Delhi 07-04.pdf
+data/processed_pdfs/TH- Delhi 07-04.pdf
+data/processed_pdfs/The Tribune Delhi 07-04.pdf
+data/processed_pdfs/TOI-Delhi 07-04.pdf
+data/processed_pdfs/TOI-Delhi 18-03.pdf
+data/processed_pdfs/UHT Delhi 07-04.pdf
+data/raw_pdfs_fp/Free Press-Mumbai 07-04.pdf
+data/raw_pdfs/micro/micro_uht.pdf
+data/raw_pdfs/micro/p14_15.pdf
+data/raw_pdfs/micro/UHT Delhi 07-04.pdf
+data/raw_pdfs/micro/verify_2pages.pdf
+data/test_2pdf/micro_uht.pdf
+data/test_2pdf/UHT Delhi 07-04.pdf
+data/validation-data/different-newspaper-english/rawpdf/IE-Delhi 04-04.pdf
+data/validation-data/different-newspaper-english/rawpdf/Statesman-Delhi 04-04.pdf
+data/validation-data/different-newspaper-english/rawpdf/TH- Delhi 04-04.pdf
+data/validation-data/different-newspaper-english/rawpdf/The Tribune Delhi 04-04.pdf
+data/validation-data/different-newspaper-english/rawpdf/UHT Delhi 04-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/BS English-Delhi 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/ET-Delhi 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/FE-Delhi 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/Free Press-Mumbai 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/IE-Delhi 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/Mint Delhi 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/NIE Chennai 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/Orissa-Post-07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/Statesman-Delhi 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/TH- Delhi 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/The Tribune Delhi 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/TOI-Delhi 07-04.pdf
+data/validation-data/fresh-sparse-holdout-v1/rawpdf/UHT Delhi 07-04.pdf
+data/validation-data/new-data/raw_pdfs/BS English-Delhi 07-04.pdf
+data/validation-data/new-data/raw_pdfs/ET-Delhi 07-04.pdf
+data/validation-data/new-data/raw_pdfs/FE-Delhi 07-04.pdf
+data/validation-data/new-data/raw_pdfs/Free Press-Mumbai 07-04.pdf
+data/validation-data/new-data/raw_pdfs/IE-Delhi 07-04.pdf
+data/validation-data/new-data/raw_pdfs/Mint Delhi 07-04.pdf
+data/validation-data/new-data/raw_pdfs/NIE Chennai 07-04.pdf
+data/validation-data/new-data/raw_pdfs/Orissa-Post-07-04.pdf
+data/validation-data/new-data/raw_pdfs/Statesman-Delhi 07-04.pdf
+data/validation-data/new-data/raw_pdfs/TH- Delhi 07-04.pdf
+data/validation-data/new-data/raw_pdfs/The Tribune Delhi 07-04.pdf
+data/validation-data/new-data/raw_pdfs/TOI-Delhi 07-04.pdf
+data/validation-data/new-data/raw_pdfs/UHT Delhi 07-04.pdf
+data/validation-data/same-newspaper-but-different-dates-then-trained/rawpdf/BS English-Delhi 04-04.pdf
+data/validation-data/same-newspaper-but-different-dates-then-trained/rawpdf/ET-Delhi 04-04.pdf
+data/validation-data/same-newspaper-but-different-dates-then-trained/rawpdf/TOI-Delhi 04-04.pdf

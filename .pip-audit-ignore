@@ -1,0 +1,11 @@
+# Ragas 0.4.3 vulnerability - Unfixable as it's the latest version
+PYSEC-2026-3046
+# Diskcache 5.6.3 vulnerability - Unfixable currently
+PYSEC-2026-2447
+# Transformers 4.57.6 vulnerabilities - Unfixable because sentence-transformers limits to <5.0.0
+PYSEC-2025-217
+PYSEC-2026-2288
+PYSEC-2026-2289
+PYSEC-2026-2290
+# Stanza 1.10.1 vulnerability - Unfixable because argostranslate limits to ==1.10.1
+PYSEC-2026-3075

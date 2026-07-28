@@ -1,0 +1,36 @@
+dependency,declared,used_in_code,purpose,risk_level,notes,replacement_candidate
+argostranslate==1.9.6,yes,src/pipeline/stage05_translation.py,hi->en offline translation,medium,CPU-bound; per-line call pattern is the slow part not the lib,IndicTrans2 if quality becomes an issue; batch calls first
+beautifulsoup4==4.14.2,yes,src/downloader/newspaper_downloader.py,HTML parsing for scraping heuristics,low,fine,none
+easyocr==1.7.2,yes,src/pipeline/stage04_ocr.py,GPU OCR engine,high,core extraction quality bottleneck; roadmap doc already plans VLM replacement,VLM/OCR per docs/V2_MAIN_ROADMAP_VLM_OCR.md; PaddleOCR was tried and abandoned (research/)
+google-generativeai==0.8.5,yes,src/llm/gemini_client.py + stage09_llm_filter fallback,cloud LLM analysis,medium,legacy SDK line; global genai.configure enables the key-race (F-021),google-genai (new SDK; per-client keys fix F-021 structurally)
+numpy==2.2.6,yes,stage03/stage04/vision,array ops,low,fine,none
+nvidia-ml-py==13.580.82,yes,(import fallback in stage04),GPU memory/util monitoring,low,duplicate of pynvml — both declared; stage04 tries pynvml first,keep one of the two
+opencv-python-headless==4.12.0.88,yes,stage03/stage04/vision,image processing,low,headless variant correctly chosen,none
+pandas==2.3.3,yes,imported in stage09_shortlist.py only — and never used (no pd. references),none (dead import),low,heavy transitive install for zero use,remove import + dependency
+pdf2image==1.17.0,yes,stage01 fallback renderer,PDF rasterization fallback,low,requires poppler system dep (undocumented),none
+pdfplumber==0.11.7,yes,stage09_dynamic_resumes,resume PDF text extraction,low,fine,none
+Pillow==11.3.0,yes,stage03 (large-file path),image loading fallback,low,fine,none
+psutil==7.0.0,yes,stage04 + stage07,CPU utilization sampling,low,fine,none
+PyGithub==2.8.1,yes,stage09_dynamic_resumes,GitHub repo/skills scrape,low,unauthenticated fallback rate-limits silently,none
+PyMuPDF==1.26.5,yes,stage01 (fitz),primary PDF rendering,low,AGPL license note if this ever ships beyond personal use,none
+PyPDF2==3.0.1,yes,src/llm/gemini_client.py extract_text_from_file,PDF text extraction in a rarely-used helper,low,PyPDF2 is deprecated upstream (renamed pypdf); path barely used,pypdf or delete the helper path
+pynvml==13.0.1,yes,stage04 primary NVML import,GPU monitoring,low,duplicate of nvidia-ml-py (see above),consolidate
+pytesseract==0.3.13,yes,stage03,OCR-based keep/skip filtering,medium,requires system tesseract (undocumented dep),none
+python-dotenv==1.1.1,yes,stage10,env loading,low,only stage10 loads .env; other stages read raw env,load once in core/config.py
+requests==2.32.5,yes,stage07/stage10/downloader,HTTP,low,fine,none
+rich==14.2.0,yes,stage07,progress bars,low,cosmetic,none
+selenium==4.38.0,yes,downloader,browser automation for scraping,high,anti-bot arms race; requires chrome+driver+display (headless:false in live config),Playwright for residual scraping after source diversification
+sentence-transformers==5.1.0,yes,stage09_local_filter,MiniLM similarity filtering,low,pulls large transitive stack; fine,none
+Telethon==1.41.2,yes,downloader phase 3,Telegram MTProto channel downloads,medium,session file at repo root (F-029); otherwise the most robust ingestion path,promote to primary source (Roadmap 3.2)
+tenacity==9.1.2,yes,stage09_llm_filter fallback client only,retry decorators,low,used only in the no-multikey fallback path,adopt for main client to replace homemade retry loops
+torch==2.4.1+cu121,yes,stage04/stage05/stage09_local_filter,GPU runtime,medium,cu121 pin couples install to CUDA env; CI installs it for import tests,split CI requirements (Roadmap 1.9)
+torchaudio==2.4.1+cu121,yes,no imports anywhere,none,low,dead weight (~GB scale wheel),remove
+torchvision==0.19.1+cu121,yes,no direct imports (easyocr transitive dependency),easyocr requirement,low,keep — required transitively by easyocr,none
+tqdm==4.67.1,yes,stage03/stage09_local_filter/stage09_llm_filter,progress bars,low,fine,none
+urllib3==2.5.0,yes,stage07/downloader (Retry),HTTP retry policy,low,fine,none
+pytest==8.4.2 (in requirements.txt),yes,tests/,test runner,low,duplicated in requirements-dev.txt; belongs only in dev file,move to requirements-dev.txt only
+poppler (system),no,pdf2image requirement,PDF rasterization,medium,undeclared system dependency; absent = fallback renderer dies,document in README / health_check
+tesseract (system),no,pytesseract requirement,OCR filtering,medium,undeclared system dependency,document + health_check probe
+chrome+chromedriver (system),no,selenium requirement,scraping,high,undeclared; version drift breaks all drivers silently,document; Playwright bundles browsers
+ollama (system),no,stage07,local LLM server,high,health_check probes binary only not model presence,systemd unit + model presence check
+argos hi->en model (data),no,stage05,translation package,medium,absent package = stage no-ops with exit 0,startup assertion (Roadmap 1.1)

@@ -1,0 +1,72 @@
+{
+  "per_pdf": {
+    "BS English-Delhi 07-04.pdf": {
+      "digital": 20,
+      "scan": 0,
+      "total": 20
+    },
+    "ET-Delhi 07-04.pdf": {
+      "digital": 15,
+      "scan": 5,
+      "total": 20
+    },
+    "FE-Delhi 07-04.pdf": {
+      "digital": 20,
+      "scan": 2,
+      "total": 22
+    },
+    "Free Press-Mumbai 07-04.pdf": {
+      "digital": 32,
+      "scan": 6,
+      "total": 38
+    },
+    "IE-Delhi 07-04.pdf": {
+      "digital": 21,
+      "scan": 2,
+      "total": 23
+    },
+    "Mint Delhi 07-04.pdf": {
+      "digital": 16,
+      "scan": 2,
+      "total": 18
+    },
+    "NIE Chennai 07-04.pdf": {
+      "digital": 20,
+      "scan": 0,
+      "total": 20
+    },
+    "Orissa-Post-07-04.pdf": {
+      "digital": 12,
+      "scan": 0,
+      "total": 12
+    },
+    "Statesman-Delhi 07-04.pdf": {
+      "digital": 12,
+      "scan": 0,
+      "total": 12
+    },
+    "TH- Delhi 07-04.pdf": {
+      "digital": 20,
+      "scan": 4,
+      "total": 24
+    },
+    "TOI-Delhi 07-04.pdf": {
+      "digital": 26,
+      "scan": 3,
+      "total": 29
+    },
+    "The Tribune Delhi 07-04.pdf": {
+      "digital": 13,
+      "scan": 1,
+      "total": 14
+    },
+    "UHT Delhi 07-04.pdf": {
+      "digital": 23,
+      "scan": 3,
+      "total": 26
+    }
+  },
+  "total_digital": 250,
+  "total_scan": 28,
+  "total_pages": 278
+}

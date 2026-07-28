@@ -1,0 +1,48 @@
+[CONFIG]
+pdf_input = data/raw_pdfs
+images_output = data/pdf2img
+manifest_output = run_state/stage1_page_identity_manifest.json
+workers = 4
+dynamic_dpi = True
+skip_existing = False
+move_processed = False
+[→] Found 1 PDF(s). Using up to 4 process(es), dynamic threads per PDF, dynamic DPI = True
+📄 BS English-Delhi 07-04.pdf
+   Pages: 20 | Dynamic DPI: True | Skip existing: False
+   Time: 6.31s (0.32s/page)
+   Fallback pages: 0 | Failed: 0 | Stale removed: 0
+✅ Output: data/pdf2img/BS English-Delhi 07-04
+
+🧾 Stage1 manifest written: run_state/stage1_page_identity_manifest.json
+📋 Page manifest JSONL written: run_state/page_manifest.jsonl (20 pages)
+Stage1 manifest validation OK: 20 pages, all images present, all page_ids unique
+🏁 Total time: 6.91s
+🚀 Launching Parallel Detector on 20 pages...
+[✓] Detected 1 legacy smart blocks from page BS English-Delhi 07-04_p3
+[✓] Detected 11 legacy smart blocks from page BS English-Delhi 07-04_p12
+[✓] Detected 21 legacy smart blocks from page BS English-Delhi 07-04_p14
+[✓] Detected 8 legacy smart blocks from page BS English-Delhi 07-04_p6
+[✓] Detected 8 legacy smart blocks from page BS English-Delhi 07-04_p7
+[✓] Detected 6 legacy smart blocks from page BS English-Delhi 07-04_p13
+[✓] Detected 2 legacy smart blocks from page BS English-Delhi 07-04_p1
+[✓] Detected 5 legacy smart blocks from page BS English-Delhi 07-04_p11
+[✓] Detected 2 legacy smart blocks from page BS English-Delhi 07-04_p17
+[✓] Detected 5 legacy smart blocks from page BS English-Delhi 07-04_p5
+[✓] Detected 4 legacy smart blocks from page BS English-Delhi 07-04_p10
+[✓] Detected 1 legacy smart blocks from page BS English-Delhi 07-04_p18
+[✓] Detected 24 legacy smart blocks from page BS English-Delhi 07-04_p4
+[✓] Detected 13 legacy smart blocks from page BS English-Delhi 07-04_p9
+[✓] Detected 12 legacy smart blocks from page BS English-Delhi 07-04_p15
+[✓] Detected 4 legacy smart blocks from page BS English-Delhi 07-04_p20
+✅ Parallel Detection Complete: 161 crops in 0.79s
+  Launching Batched OCR: BS English-Delhi 07-04 (161 crops)...
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+✅ Batched OCR Complete: 161 crops in 4.0s
+
+>>> BENCHMARK: 1-PDF (1 PDFs)
+
+--- RESULTS: 1-PDF ---
+Total Time: 12.15s
+S1: 7.1s | S2: 0.9s | S3: 4.2s
+Crops: 161 | Throughput: 38.70 crops/sec

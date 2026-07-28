@@ -1,0 +1,3 @@
+Requirement already satisfied: nvidia-cudnn-cu12 in ./4_env/lib/python3.10/site-packages (9.1.0.70)
+Requirement already satisfied: nvidia-nvjitlink-cu12 in ./4_env/lib/python3.10/site-packages (12.4.127)
+Requirement already satisfied: nvidia-cublas-cu12 in ./4_env/lib/python3.10/site-packages (from nvidia-cudnn-cu12) (12.4.5.8)

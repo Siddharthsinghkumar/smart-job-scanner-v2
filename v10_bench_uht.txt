@@ -1,0 +1,94 @@
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+🚀 v10.0 Total-Stream Engine: UHT Delhi 07-04.pdf
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/sidd/project/smart-job-scanner-v2/4_env/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[CPU] Page 21 dispatched (2146 tiles).
+[CPU] Page 22 dispatched (2146 tiles).
+[CPU] Page 25 dispatched (2146 tiles).
+[CPU] Page 26 dispatched (2146 tiles).
+[CPU] Page 23 dispatched (2146 tiles).
+[CPU] Page 24 dispatched (2146 tiles).
+[CPU] Page 19 dispatched (2146 tiles).
+[CPU] Page 20 dispatched (2146 tiles).
+[CPU] Page 16 dispatched (2146 tiles).
+[CPU] Page 17 dispatched (2146 tiles).
+[CPU] Page 18 dispatched (2146 tiles).
+[CPU] Page 13 dispatched (2146 tiles).
+[CPU] Page 14 dispatched (2146 tiles).
+[CPU] Page 15 dispatched (2146 tiles).
+[CPU] Page 7 dispatched (2146 tiles).
+[CPU] Page 8 dispatched (2146 tiles).
+[CPU] Page 9 dispatched (2146 tiles).
+[CPU] Page 4 dispatched (2146 tiles).
+[CPU] Page 5 dispatched (2146 tiles).
+[CPU] Page 6 dispatched (2146 tiles).
+[CPU] Page 1 dispatched (2146 tiles).
+[CPU] Page 2 dispatched (2146 tiles).
+[CPU] Page 3 dispatched (2146 tiles).
+[CPU] Page 10 dispatched (2146 tiles).
+[CPU] Page 11 dispatched (2146 tiles).
+[CPU] Page 12 dispatched (2146 tiles).
+[Feeder] Page 21 ready for stitching.
+[Feeder] Page 16 ready for stitching.
+[Feeder] Page 25 ready for stitching.
+[Feeder] Page 10 ready for stitching.
+[Feeder] Page 23 ready for stitching.
+[Feeder] Page 13 ready for stitching.
+[Feeder] Page 4 ready for stitching.
+[Feeder] Page 1 ready for stitching.
+[Feeder] Page 7 ready for stitching.
+[Feeder] Page 19 ready for stitching.
+[Feeder] Page 22 ready for stitching.
+[Feeder] Page 17 ready for stitching.
+[Feeder] Page 26 ready for stitching.
+[Feeder] Page 24 ready for stitching.
+[Feeder] Page 14 ready for stitching.
+[Feeder] Page 11 ready for stitching.
+[Feeder] Page 5 ready for stitching.
+[Feeder] Page 2 ready for stitching.
+[Feeder] Page 8 ready for stitching.
+[Feeder] Page 20 ready for stitching.
+[Feeder] Page 18 ready for stitching.
+[Feeder] Page 15 ready for stitching.
+[Feeder] Page 9 ready for stitching.
+[Feeder] Page 6 ready for stitching.
+[Feeder] Page 3 ready for stitching.
+[Feeder] Page 12 ready for stitching.
+✅ v10.0 Complete: 8393 ads in 97.42s
