@@ -61,21 +61,9 @@ def parse_arguments():
 # ─── Logging Setup ───
 def setup_logging():
     """Configure comprehensive logging to file and console"""
-    log_filename = LOG_DIR / f"telegram_notify_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-    
-    logging.basicConfig(format="%(asctime)s [%(levelname)-8s] %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-        handlers=[
-            logging.FileHandler(log_filename, encoding='utf-8'),
-            logging.StreamHandler()
-        ]
-    )
-    
-    # Create logger instance
-from src.utils.logging_utils import configure_logging
-logger = configure_logging("stage10_notification")
+    from src.utils.logging_utils import configure_logging
+    logger = configure_logging("stage10_notification", log_dir=LOG_DIR)
     logger.info(f"🔧 Starting Telegram Notifier")
-    logger.info(f"📂 Log file: {log_filename}")
     logger.info(f"📊 History DB: {HISTORY_DB}")
     logger.info(f"🕓 State file: {STATE_FILE}")
     logger.info(f"🔍 Debug mode: {DEBUG_MODE}")
