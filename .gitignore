@@ -22,7 +22,7 @@ venv/
 pytorch/
 
 # Runtime logs/state/artifacts
-data/
+data/*
 logs/
 run_state/
 cache_blocks/
@@ -57,6 +57,7 @@ data/shortlists/
 data/shortlisted_jobs_json/
 data/progress/
 data/telegram/
+!data/pipeline_metrics.json
 
 # Generic temp/debug artifacts
 *.log
@@ -66,3 +67,5 @@ data/telegram/
 *.tmp
 *.part
 *.crdownload
+
+migrate_logging.py
