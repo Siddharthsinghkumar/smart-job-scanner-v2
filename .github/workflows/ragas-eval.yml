@@ -1,0 +1,19 @@
+name: Ragas Evaluation
+on: 
+  pull_request:
+    paths:
+      - 'src/pipeline/stage07_llm_extraction.py'
+      - 'scripts/evaluate_retrieval.py'
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          pip install -r requirements.txt
+          python scripts/evaluate_retrieval.py
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

@@ -98,3 +98,9 @@ To tag a stable release manually:
 git tag -a v2.0 -m "Smart Job Scanner v2 stable"
 git push origin v2.0
 ```
+
+## Documentation & Research
+
+Detailed documentation and system audits are available in the repository:
+- **[docs/](docs/)**: Contains high-level roadmaps and architectural blueprints.
+- **[research/](research/)**: Contains in-depth technical audits, dependency matrices, system topology reviews, and LLM evaluation papers.
