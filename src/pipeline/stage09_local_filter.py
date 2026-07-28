@@ -9,6 +9,8 @@ from datetime import datetime
 from tqdm import tqdm
 from sentence_transformers import SentenceTransformer, util
 import torch
+import torch.nn.functional as F
+from transformers import AutoTokenizer, AutoModel
 
 # ───── Config ─────
 BASE_DIR = Path("data/Jobs_found_final")      # newspaper job files
@@ -33,6 +35,30 @@ def stable_id(text: str) -> str:
     """Generate a short stable SHA-256 digest for text (12 chars)."""
     h = hashlib.sha256(text.encode("utf-8")).hexdigest()
     return h[:12]
+
+# --- HuggingFace direct embedding function ---
+def mean_pooling(model_output, attention_mask):
+    """Mean pooling — explicit HuggingFace Transformers implementation."""
+    token_embeddings = model_output[0]
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(
+        input_mask_expanded.sum(1), min=1e-9
+    )
+
+def get_hf_embeddings(texts, tokenizer, model, batch_size=32):
+    """Compute normalized embeddings using raw HuggingFace Transformers."""
+    all_embeddings = []
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i + batch_size]
+        encoded = tokenizer(batch, padding=True, truncation=True,
+                          max_length=512, return_tensors='pt').to(model.device)
+        with torch.no_grad():
+            outputs = model(**encoded)
+        embeddings = mean_pooling(outputs, encoded['attention_mask'])
+        embeddings = F.normalize(embeddings, p=2, dim=1)
+        all_embeddings.append(embeddings)
+    return torch.cat(all_embeddings, dim=0)
+
 
 
 def load_jobs():
@@ -113,14 +139,19 @@ def main():
         logger.error("No resumes found, exiting.")
         return
 
-    logger.info("🤖 Loading MiniLM model...")
+    logger.info("🤖 Loading MiniLM model (SentenceTransformer)...")
     model = SentenceTransformer("all-MiniLM-L6-v2")
     device = model.device
     logger.info(f"Use pytorch device_name: {device}")
+    
+    logger.info("🤖 Loading HF AutoModel for comparison...")
+    hf_tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+    hf_model = AutoModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2").to(device)
 
     resume_names = list(resumes.keys())
     resume_texts = list(resumes.values())
     resume_embeddings = model.encode(resume_texts, convert_to_tensor=True)
+    hf_resume_embeddings = get_hf_embeddings(resume_texts, hf_tokenizer, hf_model)
 
     # Prepare job data for batching
     job_ids = list(jobs.keys())
@@ -129,14 +160,18 @@ def main():
 
     logger.info(f"📊 Encoding {len(job_texts)} jobs in batches of {batch_size}...")
     job_embeddings = []
-    for i in tqdm(range(0, len(job_texts), batch_size), desc="Encoding batches"):
+    for i in tqdm(range(0, len(job_texts), batch_size), desc="Encoding batches (ST)"):
         batch_texts = job_texts[i:i + batch_size]
         batch_embeds = model.encode(batch_texts, convert_to_tensor=True)
         job_embeddings.append(batch_embeds)
     job_embeddings = torch.cat(job_embeddings, dim=0)
-
+    
     logger.info("📊 Computing all similarities (vectorized matrix)...")
     all_scores = util.cos_sim(job_embeddings, resume_embeddings).cpu().numpy()
+    
+    logger.info("📊 Encoding and comparing with explicit HF Transformers...")
+    hf_job_embeddings = get_hf_embeddings(job_texts, hf_tokenizer, hf_model, batch_size=batch_size)
+    hf_all_scores = torch.mm(hf_job_embeddings, hf_resume_embeddings.transpose(0, 1)).cpu().numpy()
 
     shortlisted = []
     debug_similarity = {}
@@ -147,6 +182,12 @@ def main():
         scores_dict = {name: float(scores[j]) for j, name in enumerate(resume_names)}
         best_resume = max(scores_dict, key=scores_dict.get)
         best_score = scores_dict[best_resume]
+        
+        hf_scores_dict = {name: float(hf_all_scores[i][j]) for j, name in enumerate(resume_names)}
+        hf_best_resume = max(hf_scores_dict, key=hf_scores_dict.get)
+        hf_best_score = hf_scores_dict[hf_best_resume]
+        
+        logger.info("score_comparison", st_best=round(best_score, 4), hf_best=round(hf_best_score, 4), delta=round(abs(best_score - hf_best_score), 4))
 
         debug_similarity[job_id] = {
             "similarities": {k: round(v, 3) for k, v in scores_dict.items()},
