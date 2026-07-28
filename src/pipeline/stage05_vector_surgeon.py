@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage05_vector_surgeon")
 Stage 05: Vector Surgeon (v5.1 - Hybrid Recovery).
 Policy: Vector Similarity + Heuristic Safety-Net.
 """

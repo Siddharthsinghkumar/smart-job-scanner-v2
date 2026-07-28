@@ -42,6 +42,8 @@ Dependencies:
 import os
 import re
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage07_llm_extraction")
 import requests
 import time
 import sys
@@ -260,10 +262,7 @@ log_dir.mkdir(parents=True, exist_ok=True)
 timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M")
 log_name = f"final_ollama_run_{timestamp}.log"
 
-logging.basicConfig(
-    filename=log_dir / log_name,
-    filemode='a',
-    format="%(asctime)s - %(levelname)s - %(message)s",
+s - %(levelname)s - %(message)s",
     level=logging.INFO
 )
 

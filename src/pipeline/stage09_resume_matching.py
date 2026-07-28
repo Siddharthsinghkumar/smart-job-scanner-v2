@@ -7,6 +7,8 @@ Runs the original Stage-9 sub-steps in the same order:
 3) cloud LLM filtering
 4) shortlist generation
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage09_resume_matching")
 
 from __future__ import annotations
 

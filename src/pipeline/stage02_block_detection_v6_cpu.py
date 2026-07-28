@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage02_block_detection_v6_cpu")
 Stage 02 v11.1: Sonic-Stream Core Logic.
 Optimized for modular calling by Hybrid Router.
 """

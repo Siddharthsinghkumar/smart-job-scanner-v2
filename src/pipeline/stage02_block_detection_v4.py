@@ -12,6 +12,8 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage02_block_detection_v4")
 import os
 import sys
 import time
@@ -29,10 +31,7 @@ log_dir.mkdir(parents=True, exist_ok=True)
 timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M")
 log_file = log_dir / f"smart_block_detector_v4_recall_{timestamp}.log"
 
-logging.basicConfig(
-    filename=log_file,
-    filemode="a",
-    format="%(asctime)s - %(levelname)s - %(message)s",
+s - %(levelname)s - %(message)s",
     level=logging.INFO,
 )
 

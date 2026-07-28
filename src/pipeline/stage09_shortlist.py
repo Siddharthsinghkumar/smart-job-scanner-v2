@@ -1,6 +1,8 @@
 import json
 import sqlite3
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage09_shortlist")
 import pandas as pd
 from pathlib import Path
 from datetime import datetime, timedelta
@@ -10,11 +12,7 @@ LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
 log_file = LOG_DIR / f"smart_shortlist_{datetime.now():%Y_%m_%d_%H_%M}.log"
 
-logging.basicConfig(
-    filename=log_file,
-    filemode="w",
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
+s [%(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 

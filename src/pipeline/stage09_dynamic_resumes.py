@@ -8,6 +8,8 @@ import os
 import sys
 import signal
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage09_dynamic_resumes")
 import time
 import json
 from pathlib import Path
@@ -36,9 +38,7 @@ CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 # ───── Logging Setup ─────
 log_file = LOG_DIR / f"dynamic_resumes_{datetime.now().strftime('%Y_%m_%d_%H_%M')}.log"
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
+s [%(levelname)s] %(message)s",
     handlers=[
         logging.FileHandler(log_file, mode="w"),
         logging.StreamHandler()

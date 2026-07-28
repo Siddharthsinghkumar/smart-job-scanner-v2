@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage02_block_detection_v5")
 Stage 02 v5.7: Persistent Sequential High-Recall.
 Strict sequential processing to avoid GPU thrashing.
 """

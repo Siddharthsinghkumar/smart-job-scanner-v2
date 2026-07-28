@@ -2,6 +2,8 @@ import os
 import re
 import difflib
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage08_post_processing")
 import signal
 import sys
 from pathlib import Path
@@ -17,10 +19,7 @@ timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M")
 log_name = f"deduplication_{timestamp}.log"
 
 # File logger (all details)
-logging.basicConfig(
-    filename=log_dir / log_name,
-    filemode="a",
-    format="%(asctime)s [%(levelname)s] %(message)s",
+s [%(levelname)s] %(message)s",
     level=logging.INFO,
 )
 

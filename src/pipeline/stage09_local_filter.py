@@ -1,5 +1,7 @@
 import json
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage09_local_filter")
 import hashlib
 import argparse
 from pathlib import Path

@@ -1,6 +1,8 @@
 import os
 import re
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage06_batch_builder")
 from pathlib import Path
 from datetime import datetime
 
@@ -17,10 +19,7 @@ log_dir.mkdir(parents=True, exist_ok=True)
 timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M")
 log_name = f"batch_create_{timestamp}.log"
 
-logging.basicConfig(
-    filename=log_dir / log_name,
-    filemode='a',
-    format="%(asctime)s - %(levelname)s - %(message)s",
+s - %(levelname)s - %(message)s",
     level=logging.INFO
 )
 

@@ -11,6 +11,8 @@ import re
 import torch
 import easyocr
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage04_ocr")
 import cv2
 import numpy as np
 import gc

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage04_5_refiner")
 Stage 04.5: Semantic-Geospatial Refiner
 Tuned for high recall preservation.
 """

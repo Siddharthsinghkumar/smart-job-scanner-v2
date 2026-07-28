@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage02_block_detection_hybrid")
 Stage 02 v12.0: Hybrid-Router Engine.
 Policy: 
 - Digital/Sparse Pages -> v2 (OpenCV)

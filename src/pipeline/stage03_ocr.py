@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage03_ocr")
 Step 3: OCR pipeline (v4.4 - Infinite-Stream).
 Optimized for high-volume cross-validation.
 """

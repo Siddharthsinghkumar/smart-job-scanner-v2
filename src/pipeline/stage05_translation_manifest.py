@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage05_translation_manifest")
 Stage 05: Translation (Manifest-First)
 Optimized for 4GB VRAM & Multi-core CPU.
 Reads run_state/ocr_manifest.jsonl -> writes run_state/translated_manifest.jsonl

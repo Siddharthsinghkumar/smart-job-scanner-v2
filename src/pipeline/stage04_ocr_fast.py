@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage04_ocr_fast")
 Stage 04: Fast Single-Process GPU OCR
 Optimized for 4GB VRAM. Avoids multiprocessing CUDA errors.
 Processes all job blocks from data/job_blocks_refined.

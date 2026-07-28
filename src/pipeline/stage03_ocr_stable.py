@@ -58,8 +58,9 @@ def gpu_worker_process(task_queue, result_queue, crops_dir):
         psutil.Process().cpu_affinity(list(range(min(psutil.cpu_count(), OCR_CORE_LIMIT))))
     except: pass
 
-    logger = logging.getLogger(__name__)
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s [GPU] %(message)s")
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage03_ocr_stable")
+    s [GPU] %(message)s")
 
     logger.info(f"Initializing EasyOCR with {OCR_DETECTOR}")
     reader = Reader(['en'], gpu=True, detector=OCR_DETECTOR, cudnn_benchmark=True)

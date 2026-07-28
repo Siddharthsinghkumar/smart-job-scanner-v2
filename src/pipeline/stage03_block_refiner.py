@@ -3,6 +3,8 @@ import numpy as np
 import os
 import time
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage03_block_refiner")
 import json
 import argparse
 import pytesseract
@@ -168,10 +170,7 @@ log_dir.mkdir(parents=True, exist_ok=True)
 timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M")
 log_name = f"block_refiner_{timestamp}.log"
 
-logging.basicConfig(
-    filename=log_dir / log_name,
-    filemode='a',
-    format="%(asctime)s - %(levelname)s - %(message)s",
+s - %(levelname)s - %(message)s",
     level=logging.INFO
 )
 

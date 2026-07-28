@@ -8,6 +8,8 @@ import os
 import sys
 import json
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage02_block_detection_parallel")
 import time
 import multiprocessing
 from pathlib import Path

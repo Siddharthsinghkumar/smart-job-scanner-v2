@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage02_block_detection_continuum")
 Stage 02 v11.2: Continuum Engine.
 Strategy: Warm Model Persistence across multiple PDFs. 
 Eliminates the 10s "nothing" gap between files.

@@ -27,6 +27,8 @@ from pathlib import Path
 from datetime import datetime
 import shutil
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage01_pdf_to_images")
 import gc
 import atexit
 from itertools import repeat
@@ -87,10 +89,7 @@ log_dir.mkdir(parents=True, exist_ok=True)
 timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M")
 log_name = f"pdf2image_{timestamp}.log"
 
-logging.basicConfig(
-    filename=log_dir / log_name,
-    filemode="a",
-    format="%(asctime)s - %(levelname)s - %(message)s",
+s - %(levelname)s - %(message)s",
     level=logging.INFO,
 )
 

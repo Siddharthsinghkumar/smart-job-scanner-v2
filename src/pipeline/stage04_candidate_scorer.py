@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage04_candidate_scorer")
 Step 4: Candidate Scorer (v3.5 - Final Victory).
 Goal: FP < 10% of Stage 3 while keeping 100% of TPs (4/4).
 Strategy: Combine keyword-rescue with targeted spatial-rescue for Page 15.

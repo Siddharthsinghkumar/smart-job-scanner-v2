@@ -1,6 +1,8 @@
 import os
 import warnings
 import logging
+from src.utils.logging_utils import configure_logging
+logger = configure_logging("stage05_translation")
 from pathlib import Path
 from datetime import datetime
 
