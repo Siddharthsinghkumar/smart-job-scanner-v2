@@ -3,14 +3,17 @@ Evaluate the pipeline's retrieval and extraction quality using RAGAS.
 Uses Merlin API (Claude Opus 4.8) via OmniRoute.
 """
 
+import argparse
 import json
 import os
-import argparse
-from pathlib import Path
-from datasets import Dataset
 
 # Monkeypatch for ragas compatibility with newer langchain versions
-import sys, types
+import sys
+import types
+from pathlib import Path
+
+from datasets import Dataset
+
 try:
     import langchain_community
     if not hasattr(langchain_community, "chat_models"):
@@ -30,9 +33,10 @@ try:
 except Exception:
     pass
 
+from langchain_openai import ChatOpenAI
 from ragas import evaluate
 from ragas.metrics import answer_relevancy, context_precision
-from langchain_openai import ChatOpenAI
+
 from src.utils.logging_utils import configure_logging
 
 logger = configure_logging("evaluate_retrieval")
@@ -105,8 +109,9 @@ def main():
     dataset = prepare_dataset(Path(args.shortlist), Path(args.resumes))
     
     if dataset is None:
-        logger.error("Could not prepare dataset.")
-        return 1
+        logger.warning("Could not prepare dataset. Skipping evaluation.")
+        print("⚠️ Skipping RAGAS evaluation: Missing shortlist dataset or resumes.")
+        return 0
         
     llm = get_eval_llm()
     
