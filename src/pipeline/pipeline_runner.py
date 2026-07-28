@@ -14,6 +14,7 @@ import subprocess
 import sys
 import time
 from typing import Any
+from prometheus_client import start_http_server, Counter, Gauge, Histogram
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -39,6 +40,27 @@ DEFAULT_COMMANDS = [
     "src/pipeline/stage10_notification.py",
     "src/pipeline/stage11_cleanup.py",
 ]
+
+# --- Prometheus metrics ---
+STAGE_DURATION = Histogram(
+    'jobv2_stage_duration_seconds',
+    'Duration of each pipeline stage',
+    ['stage_name', 'status']
+)
+STAGE_RUNS = Counter(
+    'jobv2_stage_runs_total',
+    'Total stage executions',
+    ['stage_name', 'status']
+)
+PIPELINE_STATUS = Gauge(
+    'jobv2_pipeline_running',
+    'Whether the pipeline is currently running (1=yes, 0=no)'
+)
+JOBS_PROCESSED = Counter(
+    'jobv2_jobs_processed_total',
+    'Total jobs processed across all runs'
+)
+
 
 
 def parse_args() -> argparse.Namespace:
@@ -127,6 +149,12 @@ def _update_metrics(stage_name: str, status: str, duration_seconds: float, proce
         payload["jobs_filtered"] = int(payload.get("jobs_filtered", 0)) + int(processed_items)
     if stage_name.startswith("src/pipeline/stage10"):
         payload["jobs_sent_to_telegram"] = int(payload.get("jobs_sent_to_telegram", 0)) + int(processed_items)
+        
+    if stage_name != "pipeline":
+        STAGE_DURATION.labels(stage_name=stage_name, status=status).observe(max(float(duration_seconds), 0.0))
+        STAGE_RUNS.labels(stage_name=stage_name, status=status).inc()
+    if stage_name.startswith("src/pipeline/stage01") and status == "success":
+        JOBS_PROCESSED.inc(int(processed_items))
 
     METRICS_FILE.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
@@ -189,8 +217,12 @@ def _run_stage(python_bin: str, command: str) -> int:
 
 
 def main() -> int:
+    start_http_server(8765)
+    PIPELINE_STATUS.set(1)
+    
     args = parse_args()
     if args.max_retries < 0:
+        PIPELINE_STATUS.set(0)
         raise SystemExit("--max-retries must be >= 0")
 
     commands = _read_stage_commands()
@@ -202,10 +234,12 @@ def main() -> int:
 
     if args.dry_run:
         print("Dry-run completed successfully (no stages executed).")
+        PIPELINE_STATUS.set(0)
         return 0
 
     python_bin = args.python_bin
     if not Path(python_bin).exists():
+        PIPELINE_STATUS.set(0)
         raise SystemExit(f"Python executable not found: {python_bin}")
 
     LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -246,11 +280,13 @@ def main() -> int:
             if args.max_retries > 0 and attempt >= args.max_retries:
                 _append_structured_log("pipeline", "failed", duration, 0)
                 _update_metrics("pipeline", "failed", duration, 0)
+                PIPELINE_STATUS.set(0)
                 return 3
 
     _append_structured_log("pipeline", "success", 0.0, 0)
     _update_metrics("pipeline", "success", 0.0, 0)
     print("All commands finished successfully.")
+    PIPELINE_STATUS.set(0)
     return 0
 
 
