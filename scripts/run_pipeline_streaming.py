@@ -1,18 +1,16 @@
 
-import os
+import multiprocessing
 import sys
 import time
-import json
-import threading
-import multiprocessing
-import subprocess
 from pathlib import Path
 from queue import Empty
+
+import cv2
+import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.pipeline.pipeline_metadata import read_crop_manifest_jsonl
 
 # Config
 NUM_RENDER_WORKERS = 4
@@ -114,7 +112,6 @@ def stream_pipeline(pdf_dir, output_dir):
 
     # Launch Threads/Processes
     # (Simplified for the benchmark script)
-    pass
 
 if __name__ == "__main__":
     # This is a template for the report; I will actually use the refactored stage03_ocr.py 

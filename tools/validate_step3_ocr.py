@@ -12,7 +12,6 @@ Checks:
 import json
 import sys
 from pathlib import Path
-from collections import defaultdict
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -151,7 +150,7 @@ def validate_ocr_manifest(manifest_path: Path, crop_count: int) -> bool:
             all_valid = False
 
     if all_valid:
-        print(f"✅ All sampled crops are valid")
+        print("✅ All sampled crops are valid")
 
     return all_valid
 
@@ -183,7 +182,7 @@ def validate_rejects_and_candidates(
 
     # Validate rejects have rejection reasons
     for crop_id, record in list(rejects.items())[:5]:
-        if record.get('is_step3_survivor') != False:
+        if record.get('is_step3_survivor') is not False:
             print(f"  ❌ Reject {crop_id}: is_step3_survivor should be False")
             all_valid = False
         if not record.get('cheap_reject_reason'):
@@ -192,12 +191,12 @@ def validate_rejects_and_candidates(
 
     # Validate candidates are marked as survivors
     for crop_id, record in list(candidates.items())[:5]:
-        if record.get('is_step3_survivor') != True:
+        if record.get('is_step3_survivor') is not True:
             print(f"  ❌ Candidate {crop_id}: is_step3_survivor should be True")
             all_valid = False
 
     if all_valid:
-        print(f"✅ All sampled records are valid")
+        print("✅ All sampled records are valid")
 
     return all_valid
 
@@ -219,19 +218,19 @@ def validate_backward_compatibility() -> bool:
         count = count_lines_jsonl(page_manifest)
         print(f"✅ Stage 1 page_manifest.jsonl: {count} pages")
     else:
-        print(f"❌ Stage 1 page_manifest.jsonl missing")
+        print("❌ Stage 1 page_manifest.jsonl missing")
         all_valid = False
 
     if legacy_manifest.exists():
-        print(f"✅ Stage 1 legacy manifest exists")
+        print("✅ Stage 1 legacy manifest exists")
     else:
-        print(f"⚠️  Stage 1 legacy manifest not found (expected)")
+        print("⚠️  Stage 1 legacy manifest not found (expected)")
 
     if images_dir.exists():
         images = list(images_dir.glob("**/*.png"))
         print(f"✅ Stage 1 rendered images: {len(images)}")
     else:
-        print(f"⚠️  Stage 1 images directory not found")
+        print("⚠️  Stage 1 images directory not found")
 
     # Check Stage 2 outputs
     crop_manifest = Path("run_state/crop_manifest.jsonl")
@@ -239,7 +238,7 @@ def validate_backward_compatibility() -> bool:
         count = count_lines_jsonl(crop_manifest)
         print(f"✅ Stage 2 crop_manifest.jsonl: {count} crops")
     else:
-        print(f"❌ Stage 2 crop_manifest.jsonl missing")
+        print("❌ Stage 2 crop_manifest.jsonl missing")
         all_valid = False
 
     crops_dir = Path("data/crops")
@@ -247,7 +246,7 @@ def validate_backward_compatibility() -> bool:
         crops = list(crops_dir.glob("*.png"))
         print(f"✅ Stage 2 crop images: {len(crops)}")
     else:
-        print(f"❌ Stage 2 crops directory missing")
+        print("❌ Stage 2 crops directory missing")
         all_valid = False
 
     return all_valid

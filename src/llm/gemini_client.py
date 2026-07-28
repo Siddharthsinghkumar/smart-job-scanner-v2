@@ -4,21 +4,21 @@ gemini_multikey.py — ENHANCED VERSION
 High-speed multi-key rotation with parallel processing capabilities
 """
 
-import os
-import json
-import time
-import logging
-import concurrent.futures
-import threading
-from logging.handlers import RotatingFileHandler
-import sqlite3
 import argparse
+import json
+import logging
+import os
 import pathlib
-from datetime import datetime, timedelta
-from typing import List, Optional, Dict, Any
-from itertools import cycle
+import sqlite3
+import threading
+import time
 from concurrent.futures import ThreadPoolExecutor, TimeoutError, as_completed
+from datetime import datetime, timedelta
+from itertools import cycle
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
+from typing import Any
+
 from src.utils.config_loader import resolve_config_path
 
 # ========================
@@ -119,13 +119,13 @@ except Exception as e:
     HAS_GENAI = False
     logger.warning(f"GenAI SDK not installed: {e}")
 
-import requests
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
+
 
 # ========================
 # Enhanced Config Loader
 # ========================
-def load_config(config_path: Path = CONFIG_FILE) -> Dict[str, Any]:
+def load_config(config_path: Path = CONFIG_FILE) -> dict[str, Any]:
     """Load config.json with enhanced validation and graceful failure handling."""
     default_config = {
         "google_api_keys": [],
@@ -166,7 +166,7 @@ def load_config(config_path: Path = CONFIG_FILE) -> Dict[str, Any]:
 class HighSpeedMultiKeyEngine:
     """High-speed parallel processing engine with flexible key management"""
     
-    def __init__(self, api_keys: List[str], labels: Optional[List[str]] = None, 
+    def __init__(self, api_keys: list[str], labels: list[str] | None = None, 
                  model: str = DEFAULT_MODEL, max_workers: int = None,
                  validate_keys: bool = False):
         if not HAS_GENAI:
@@ -340,7 +340,7 @@ class HighSpeedMultiKeyEngine:
         logger.debug("Validation cache expired or missing, will validate keys")
         return True
 
-    def _load_validation_cache(self) -> Dict[str, Any]:
+    def _load_validation_cache(self) -> dict[str, Any]:
         """Load validation cache from disk"""
         if not self._validation_cache_path.exists():
             return {}
@@ -352,7 +352,7 @@ class HighSpeedMultiKeyEngine:
             logger.warning(f"Failed to load validation cache: {e}")
             return {}
 
-    def _save_validation_cache(self, cache_data: Dict[str, Any]):
+    def _save_validation_cache(self, cache_data: dict[str, Any]):
         """Save validation cache to disk"""
         try:
             cache_data["_metadata"] = {
@@ -384,7 +384,7 @@ class HighSpeedMultiKeyEngine:
             logger.warning(f"Key validation failed for {label}: {str(e)[:100]}")
             return False
 
-    def validate_all_keys(self, force: bool = False) -> List[str]:
+    def validate_all_keys(self, force: bool = False) -> list[str]:
         """Validate all API keys and return working ones without consuming quota"""
         working_keys = []
         working_labels = []
@@ -485,7 +485,7 @@ class HighSpeedMultiKeyEngine:
         logger.info(f"Using {len(working_keys)} valid keys out of {orig_total_keys} total")
         return working_keys
 
-    def _process_single_request(self, prompt: str, timeout_seconds: int = PER_REQUEST_TIMEOUT, **kwargs) -> Optional[Dict[str, Any]]:
+    def _process_single_request(self, prompt: str, timeout_seconds: int = PER_REQUEST_TIMEOUT, **kwargs) -> dict[str, Any] | None:
         """Central helper for processing single requests with timeout support and robust exception handling"""
         api_key, label = self._get_next_key(wait_if_none=False)
 
@@ -557,11 +557,7 @@ class HighSpeedMultiKeyEngine:
             
             # Improved 429 detection
             is_429 = False
-            if hasattr(e, "status_code") and e.status_code == 429:
-                is_429 = True
-            elif hasattr(e, "status") and e.status == 429:
-                is_429 = True
-            elif "429" in str(e):
+            if hasattr(e, "status_code") and e.status_code == 429 or hasattr(e, "status") and e.status == 429 or "429" in str(e):
                 is_429 = True
             
             if is_429:
@@ -585,7 +581,7 @@ class HighSpeedMultiKeyEngine:
                 "attempts": 0
             }
 
-    def _log_to_sqlite(self, prompt: str, response: Dict[str, Any], label: str):
+    def _log_to_sqlite(self, prompt: str, response: dict[str, Any], label: str):
         """Log request to SQLite database for auditability"""
         try:
             conn = sqlite3.connect(SQLITE_DB)
@@ -622,7 +618,7 @@ class HighSpeedMultiKeyEngine:
         except Exception as e:
             logger.error(f"Failed to log to SQLite: {e}")
 
-    def _log_to_json(self, entry: Dict[str, Any]):
+    def _log_to_json(self, entry: dict[str, Any]):
         """Log interaction to JSON file for completeness"""
         try:
             with open(JSON_LOG, "a", encoding="utf-8") as jf:
@@ -631,7 +627,7 @@ class HighSpeedMultiKeyEngine:
         except Exception as e:
             logger.error(f"Failed to log to JSON: {e}")
 
-    def generate_single(self, prompt: str, max_retries: int = 3, **kwargs) -> Dict[str, Any]:
+    def generate_single(self, prompt: str, max_retries: int = 3, **kwargs) -> dict[str, Any]:
         """Generate content for a single prompt with key rotation and retries"""
         if not self.stats["start_time"]:
             self.stats["start_time"] = time.time()
@@ -674,7 +670,7 @@ class HighSpeedMultiKeyEngine:
             "attempts": max_retries
         }
 
-    def run_batch(self, prompts: List[str], max_workers: int = None) -> List[Dict[str, Any]]:
+    def run_batch(self, prompts: list[str], max_workers: int = None) -> list[dict[str, Any]]:
         """Process multiple prompts in parallel with comprehensive timeout controls"""
         if not self.stats["start_time"]:
             self.stats["start_time"] = time.time()
@@ -774,7 +770,7 @@ class HighSpeedMultiKeyEngine:
         
         return results
 
-    def get_performance_stats(self) -> Dict[str, Any]:
+    def get_performance_stats(self) -> dict[str, Any]:
         """Get comprehensive performance statistics (thread-safe)"""
         with self.stats_lock:
             total_time = time.time() - self.stats["start_time"] if self.stats["start_time"] else 0
@@ -837,7 +833,7 @@ class FlexibleKeyManager:
     """Manager for flexible key usage patterns"""
     
     @staticmethod
-    def get_keys_by_mode(config: Dict[str, Any], keyuse: str = None, speed: str = None) -> tuple:
+    def get_keys_by_mode(config: dict[str, Any], keyuse: str = None, speed: str = None) -> tuple:
         """
         Get keys based on usage mode:
         - keyuse: "1" (use only first key), "2" (use first 2 keys), etc.
@@ -879,7 +875,7 @@ class FlexibleKeyManager:
         return api_keys, labels
 
     @staticmethod
-    def calculate_optimal_workers(api_keys: List[str], speed_mode: str = None) -> int:
+    def calculate_optimal_workers(api_keys: list[str], speed_mode: str = None) -> int:
         """Calculate optimal number of workers based on key count and speed mode"""
         key_count = len(api_keys)
         
@@ -896,7 +892,7 @@ class FlexibleKeyManager:
 # Enhanced Multi-Key Gemini Client (Backward Compatible)
 # ========================
 class GeminiMultiKey:
-    def __init__(self, api_keys: List[str], labels: Optional[List[str]] = None, 
+    def __init__(self, api_keys: list[str], labels: list[str] | None = None, 
                  model: str = DEFAULT_MODEL, speed_mode: str = None,
                  validate_keys: bool = False):
         if not HAS_GENAI:
@@ -926,9 +922,9 @@ class GeminiMultiKey:
         self.index += 1
         return key, label, idx
 
-    def generate(self, prompt: str, files: Optional[List[str]] = None, 
-                 images: Optional[List[str]] = None, max_output_tokens: int = 512, 
-                 max_retries: int = 3) -> Dict[str, Any]:
+    def generate(self, prompt: str, files: list[str] | None = None, 
+                 images: list[str] | None = None, max_output_tokens: int = 512, 
+                 max_retries: int = 3) -> dict[str, Any]:
         """Enhanced generate method with high-speed capabilities"""
         # Use high-speed engine for single generation
         result = self.engine.generate_single(prompt, max_retries)
@@ -944,15 +940,15 @@ class GeminiMultiKey:
             "error": result.get("error")
         }
 
-    def generate_batch(self, prompts: List[str], max_workers: int = None) -> List[Dict[str, Any]]:
+    def generate_batch(self, prompts: list[str], max_workers: int = None) -> list[dict[str, Any]]:
         """Generate content for multiple prompts in parallel"""
         return self.engine.run_batch(prompts, max_workers)
 
-    def validate_keys(self, force: bool = False) -> List[str]:
+    def validate_keys(self, force: bool = False) -> list[str]:
         """Validate all API keys"""
         return self.engine.validate_all_keys(force=force)
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get performance statistics"""
         return self.engine.get_performance_stats()
 
@@ -987,12 +983,12 @@ def extract_text_from_file(path: str) -> str:
 def process_request(
     gemini_client: GeminiMultiKey,
     prompt: str,
-    file_paths: Optional[List[str]] = None,
-    image_paths: Optional[List[str]] = None,
+    file_paths: list[str] | None = None,
+    image_paths: list[str] | None = None,
     do_web_search: bool = False,
-    search_config: Optional[dict] = None,
+    search_config: dict | None = None,
     db_conn=None
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     logger.info("Processing new request...")
     file_paths = file_paths or []
     image_paths = image_paths or []

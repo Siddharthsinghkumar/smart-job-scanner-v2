@@ -114,7 +114,7 @@ def main():
             struct_ok = False
 
     if struct_ok:
-        print(f"✅ All sampled records have required fields")
+        print("✅ All sampled records have required fields")
     else:
         all_pass = False
 
@@ -135,7 +135,7 @@ def main():
             types_ok = False
 
     if types_ok:
-        print(f"✅ Data types are correct")
+        print("✅ Data types are correct")
     else:
         all_pass = False
 
@@ -148,7 +148,7 @@ def main():
 
     reject_logic_ok = True
     for record in sample_rejects:
-        if record.get('is_step3_survivor') != False:
+        if record.get('is_step3_survivor') is not False:
             print(f"❌ Reject record marked as survivor: {record['crop_id']}")
             reject_logic_ok = False
         if not record.get('cheap_reject_reason'):
@@ -156,7 +156,7 @@ def main():
             reject_logic_ok = False
 
     if reject_logic_ok:
-        print(f"✅ All rejects properly marked with reasons")
+        print("✅ All rejects properly marked with reasons")
     else:
         all_pass = False
 
@@ -178,7 +178,7 @@ def main():
                 context_ok = False
 
     if context_ok:
-        print(f"✅ All context fields present")
+        print("✅ All context fields present")
     else:
         all_pass = False
 
@@ -195,27 +195,27 @@ def main():
         pm_count = count_valid_jsonl(page_manifest)
         print(f"✅ Page manifest: {pm_count} pages")
     else:
-        print(f"❌ Page manifest missing")
+        print("❌ Page manifest missing")
         all_pass = False
 
     if crop_manifest.exists():
         cm_count = count_valid_jsonl(crop_manifest)
         print(f"✅ Crop manifest: {cm_count} crops")
     else:
-        print(f"❌ Crop manifest missing")
+        print("❌ Crop manifest missing")
         all_pass = False
 
     if rendered_images:
         print(f"✅ Rendered images: {len(rendered_images)} files")
     else:
-        print(f"❌ No rendered images")
+        print("❌ No rendered images")
         all_pass = False
 
     # Summary
     print("\n" + "="*70)
     if all_pass:
         print("✅ ALL VALIDATIONS PASSED")
-        print(f"\nSummary:")
+        print("\nSummary:")
         print(f"  - {ocr_count} crops OCR'd successfully")
         print(f"  - {candidates_count} survivors for downstream")
         print(f"  - {rejects_count} cheap rejections")

@@ -2,10 +2,17 @@
 """
 Stage 1-2-3 Unified v15.5: Heartbeat Edition.
 """
-import os, sys, json, time, torch, numpy as np, cv2, fitz, shutil, warnings
-import torch.multiprocessing as tmp
-from pathlib import Path
+import sys
+import time
+import warnings
 from collections import defaultdict
+from pathlib import Path
+
+import cv2
+import fitz
+import numpy as np
+import torch
+import torch.multiprocessing as tmp
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 PROJ_ROOT = Path(__file__).resolve().parents[1]
@@ -26,8 +33,8 @@ def iou(b1, b2):
     return inter / u if u > 0 else 0
 
 def gpu_worker(tile_q, det_q, task_q, res_q):
-    from ultralytics import YOLO
     from easyocr import Reader
+    from ultralytics import YOLO
     model = YOLO(YOLO_MODEL_PATH).to('cuda')
     reader = Reader(['en'], gpu=True, detector="dbnet18", cudnn_benchmark=True)
     while True:
@@ -49,7 +56,7 @@ def gpu_worker(tile_q, det_q, task_q, res_q):
             results = model.predict(imgs, conf=CONF_THRESH, imgsz=TILE_SIZE, verbose=False, device=0)
             for i, res in enumerate(results):
                 meta = batch[i]['meta']
-                dets = [{"p_idx": meta[0], "box": [float(c[0]+meta[1]), float(c[1]+meta[2]), float(c[2]+meta[1]), float(c[3]+meta[2])], "conf": float(b.conf[0])} for b in res.boxes]
+                dets = [{"p_idx": meta[0], "box": [float(b.xyxy[0][0]+meta[1]), float(b.xyxy[0][1]+meta[2]), float(b.xyxy[0][2]+meta[1]), float(b.xyxy[0][3]+meta[2])], "conf": float(b.conf[0])} for b in res.boxes]
                 det_q.put({"p_idx": meta[0], "dets": dets, "tile_done": True})
             del results, imgs
         except: continue

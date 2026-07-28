@@ -21,8 +21,11 @@ jobs:
       - name: Read ignore file
         id: ignore_list
         run: |
-          IGNORES=$(grep -v '^#' .pip-audit-ignore | tr '\n' ',' | sed 's/,$//')
-          echo "vulns=$IGNORES" >> $GITHUB_OUTPUT
+          {
+            echo 'vulns<<EOF'
+            grep -vE '^\s*(#|$)' .pip-audit-ignore || true
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
       - uses: pypa/gh-action-pip-audit@v1.0.8
         with:
           inputs: requirements.txt
@@ -62,6 +65,7 @@ jobs:
           pip install -r requirements.txt
           python scripts/evaluate_retrieval.py
         env:
+          PYTHONPATH: .
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
   auto_merge:
