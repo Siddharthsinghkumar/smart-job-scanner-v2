@@ -1,0 +1,89 @@
+{
+  "generated_at": "2026-07-08T00:00:00+05:30",
+  "scope": {
+    "repository": "/home/sidd/project/smart-job-scanner-v2 (git main @ f51f606, origin github.com/Siddharthsinghkumar/smart-job-scanner-v2)",
+    "included": [
+      "scripts/ (scheduler.sh, run_pipeline.sh, jobs.conf, health_check.py)",
+      "src/pipeline/ (all 16 stage modules + pipeline_runner.py)",
+      "src/downloader/newspaper_downloader.py",
+      "src/llm/, src/ocr/, src/vision/, src/utils/, shims and _compat_run_module.py",
+      "configs/ (values redacted), .env.example, .gitignore, Makefile, pytest.ini, CI workflow",
+      "tests/ (all 5 files)",
+      "on-disk runtime state: progress.db schema, logs/, cache_blocks/, run_state/ (sizes and counts), secrets placement (presence only)",
+      "orchestration, SQLite usage, concurrency, external APIs, scraping, Telegram notification, observability, code structure — all explicitly covered per mandate"
+    ],
+    "method": "static code inspection + read-only shell verification (find/grep/wc/du/ls/sqlite3 schema/git); no pipeline execution, no network calls, no secret values read"
+  },
+  "exclusions": [
+    "research/ legacy experiment scripts (inventoried, not audited line-by-line)",
+    "artifacts/, history/, run_state/ experiment outputs (sized and characterized only)",
+    "docs/*.md content beyond context (VLM roadmap intent noted)",
+    "src/downloader/newspaper_downloader.py lines ~1600-2600 read via function map + targeted sections rather than in full (declared in appendix §1/§5)",
+    "runtime behavior verification (system dormant: venv and data/ absent, scheduler not running) — runtime-dependent claims are classified as hypotheses",
+    "GitHub Actions run status (offline audit)",
+    "ML model quality (OCR accuracy, embedding thresholds, prompt effectiveness) — out of scope except where reliability-relevant"
+  ],
+  "files_created": [
+    "research/00-executive-summary.md",
+    "research/01-system-inventory.md",
+    "research/02-orchestration-and-topology-review.md",
+    "research/03-pipeline-stage-and-state-management-audit.md",
+    "research/04-data-and-sqlite-audit.md",
+    "research/05-external-apis-and-concurrency-audit.md",
+    "research/06-scraping-reliability-audit.md",
+    "research/07-telegram-interface-and-notification-audit.md",
+    "research/08-observability-and-operations-review.md",
+    "research/09-code-structure-and-maintainability-review.md",
+    "research/10-improvement-roadmap.md",
+    "research/11-appendix-evidence.md",
+    "research/findings.json",
+    "research/risk-register.csv",
+    "research/pipeline-stage-matrix.csv",
+    "research/dependency-matrix.csv",
+    "research/external-api-matrix.csv",
+    "research/sqlite-query-surface.csv",
+    "research/audit-manifest.json"
+  ],
+  "total_findings": 53,
+  "findings_by_severity": {
+    "critical": 3,
+    "high": 14,
+    "medium": 22,
+    "low": 8,
+    "informational": 6
+  },
+  "findings_by_category": {
+    "operations": 4,
+    "reliability": 4,
+    "orchestration": 4,
+    "observability": 5,
+    "maintainability": 2,
+    "telegram": 4,
+    "data": 4,
+    "state": 7,
+    "pipeline-stages": 3,
+    "concurrency": 2,
+    "external-apis": 1,
+    "performance": 3,
+    "scraping": 3,
+    "security": 2,
+    "structure": 3,
+    "testing": 2
+  },
+  "findings_by_classification": {
+    "confirmed issue": 40,
+    "probable issue": 1,
+    "tradeoff": 2,
+    "hypothesis": 5,
+    "positive finding": 4,
+    "informational": 1
+  },
+  "limitations": [
+    "Static audit of a dormant system: no stage executed (venv absent, GPU pipeline, live credentials); 'confirmed' classifications rest on unambiguous code-path logic, runtime-dependent claims are explicit hypotheses (H-01..H-05)",
+    "Downloader audited ~60% by line / 100% by function map (appendix §1)",
+    "No network probing of scraping targets; fragility claims derive from code shape and on-disk failure artifacts",
+    "Line numbers reference working tree at commit f51f606 plus untracked docs/",
+    "Unresolved questions listed in appendix §4 (venv disappearance, possible second deployment, CI status, per-stage durations)"
+  ],
+  "reviewer_mode": "adversarial static audit per ETL/headless deliverable spec v2.0 with orchestration-and-operability mandate; evidence-first, severity/confidence/classification tagged, secrets redacted"
+}
