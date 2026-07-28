@@ -14,14 +14,14 @@ Pillow>=12.3.0
 psutil==7.0.0
 PyGithub==2.8.1
 PyMuPDF>=1.26.7
-PyPDF2>=3.9.0
+pypdf>=3.9.0
 pynvml==13.0.1
 pytesseract==0.3.13
 python-dotenv>=1.2.2
 structlog>=24.0
 prometheus_client>=0.20.0
-transformers>=5.5.0
-ragas>=0.4.4
+transformers>=4.41.2
+ragas>=0.4.3
 datasets>=2.16.0
 requests>=2.33.0
 rich==14.2.0
